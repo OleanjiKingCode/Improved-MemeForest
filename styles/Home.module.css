@@ -1,0 +1,440 @@
+
+
+.container {
+  
+  /* width:auto;
+  padding:0 0  10px -10px;*/
+  /* margin-left: 5px; */
+  /* background-color:#f1f1f1  */
+ 
+}
+
+.table{
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+
+
+
+}
+.pad{
+  padding: 0 20px;
+  animation: waving-hand 2.5s infinite;
+  transform-origin: 70% 70%;
+
+}
+@keyframes waving-hand {
+  0% { transform: rotate( 0.0deg) }
+ 10% { transform: rotate(14.0deg) }  /* The following five values can be played with to make the waving more or less extreme */
+ 20% { transform: rotate(-8.0deg) }
+ 30% { transform: rotate(14.0deg) }
+ 40% { transform: rotate(-4.0deg) }
+ 50% { transform: rotate(10.0deg) }
+ 60% { transform: rotate( 0.0deg) }  /* Reset for the last half to pause */
+100% { transform: rotate( 0.0deg) }
+}
+.image {
+  margin-top: 30px;
+}
+.image img {
+  border-radius: 100px;
+  
+}
+.td,.th{
+  border:1pz solid #dddddd;
+  text-align: left;
+  padding: 9px;
+  text-align: center;
+
+}
+.tr:nth-child(even){
+  background-color: #dddddd;
+}
+.table, .th, .td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  
+}
+.top{
+  padding: 20px;
+  background-color: palevioletred;
+
+}
+.first {
+  margin-left: 20px;
+  /* background-color: #0070f3; */
+  text-decoration: none;
+  margin-bottom: 20px;
+
+}
+.yup{
+
+}
+.Memebox{
+  
+  box-shadow: 0px 5px 10px 0px rgba(114, 113, 113, 0.452);
+}
+.spinner {
+  animation: spin infinite .9s linear;
+
+  /*You can increase or decrease the timer (5s) to 
+   increase or decrease the speed of the spinner*/
+}
+
+@keyframes spin {
+from {
+  transform: rotate(0deg);
+}
+to {
+  transform: rotate(360deg);
+}
+}
+.second{
+  margin-right: 10px;
+  border-radius: 50px;
+  background-color: rgb(219, 217, 217);
+
+  /* border: 1px solid rgba(0, 0, 0, 0.815); */
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* height: 0px; */
+}
+.main {
+  /* height: 80vh ; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  padding-top: 120px;
+  /* overflow-y: scroll; */
+}
+.mains {
+  /* height: 80vh ; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  padding-top: 120px;
+}
+.download{
+  box-shadow: 0px 5px 10px 0px rgba(114, 113, 113, 0.452);
+  transition: all .4s ease;
+}
+.download:hover{
+  transform: scale(0.9);
+}
+.feed { 
+ min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.upperimg{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.upperimg:hover .change {
+  transform: scale(1.5);
+}
+.change, .ToggleButton{
+  transition: all .3s ease;
+}
+
+.upperimg:hover .nameOfOwner,.upperimg:hover .dateOfMeme{
+  display: unset;
+}
+.ToggleButtonLoading{
+  background-color: rgb(255, 255, 0);
+}
+.ToggleButton:hover {
+  background-color: rgb(255, 255, 0);
+}
+.ToggleButton2Loading{
+  background-color: rgb(211, 1, 1); 
+}
+.ToggleButton2:hover {
+  background-color: rgb(211, 1, 1); 
+}
+.nameOfOwner{
+  padding: 1px 25px;
+  background-color: rgba(128, 128, 128, 0.418);
+  color: rgba(255, 255, 255, 0.527);
+  position: absolute;
+  border-radius: 10px;
+  position: absolute;
+  transform: translateY(62px);
+  align-self: flex-start;
+  justify-self: end;
+  border: 1px solid black;
+  display: none;
+  transition: all .4s ease;
+  overflow: hidden;
+}
+.dateOfMeme{
+  padding: 1px 25px;
+  font-size: 11px;
+  border-radius: 10px;
+  background-color: rgba(32, 32, 32, 0.747);
+  color: white;
+  position: absolute;
+  align-self: flex-end;
+  justify-self: start;
+  transform: translateY(-62px);
+  border: 1px solid black;
+  display: none;
+  transition: all .4s ease;
+  overflow: hidden;
+}
+.footer {
+  display: flex;
+  flex: 1;
+  padding: 2rem 0;
+  border-top: 1px solid #eaeaea;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.title a {
+  color: #0070f3;
+  text-decoration: none;
+}
+
+.title a:hover,
+.title a:focus,
+.title a:active {
+  text-decoration: underline;
+}
+
+.title {
+  margin: 0;
+  line-height: 1.15;
+  font-size: 4rem;
+}
+
+.title,
+.description {
+  text-align: center;
+}
+
+.description {
+  margin: 4rem 0;
+  line-height: 1.5;
+  font-size: 1.5rem;
+}
+
+.code {
+  background: #fafafa;
+  border-radius: 5px;
+  padding: 0.75rem;
+  font-size: 1.1rem;
+  font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
+    Bitstream Vera Sans Mono, Courier New, monospace;
+}
+
+.grid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 800px;
+}
+
+.card {
+  margin: 1rem;
+  padding: 1.5rem;
+  text-align: left;
+  color: inherit;
+  text-decoration: none;
+  border: 1px solid #eaeaea;
+  border-radius: 10px;
+  transition: color 0.15s ease, border-color 0.15s ease;
+  max-width: 300px;
+}
+
+.card:hover,
+.card:focus,
+.card:active {
+  color: #0070f3;
+  border-color: #0070f3;
+}
+
+.card h2 {
+  margin: 0 0 1rem 0;
+  font-size: 1.5rem;
+}
+
+.card p {
+  margin: 0;
+  font-size: 1.25rem;
+  line-height: 1.5;
+}
+
+.logo {
+  height: 1em;
+  margin-left: 0.5rem;
+  /* margin: ; */
+}
+
+.hover{
+  padding: 20px 10px ;
+  border-left: 4px transparent solid;
+
+}
+.hover:hover {
+  background: #1a22269f;
+  border-left: 4px #bbe012e3 solid;
+  cursor: pointer;
+}
+.feedback{
+  text-align: center;
+  margin: 20px;
+  transform: translateY(40px);
+  color: white;
+}
+.feedback:hover{
+ 
+  cursor: pointer;
+  color: rgb(61, 60, 60);
+  
+  
+}
+.hoverMeme {
+  text-align: center;
+  margin: 20px;
+  padding: 10px 15px;
+  transform: translateY(40px);
+  transition: all .3s ease;
+  font-size:18px ;
+  background-color: white;
+  color: green;
+}
+.hoverMeme:hover{
+ 
+  cursor: pointer;
+  
+  color: white;
+  background-color: rgb(6, 82, 6);
+}
+.topper{
+  margin-left: 0px;
+  position: fixed;
+  z-index: 9999;
+  width:82%;
+  top: inherit;
+  height: 100px;
+  background-color: rgb(223, 223, 223);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+    
+}
+
+.Logo{
+  width: 100px;
+  height: 10px;
+  background-color: rgb(255, 255, 255);
+}
+
+.connect{
+  transform: translateX(-30px);
+}
+
+.Menu{
+  position: fixed;
+  right: 15px;
+  top: 15px;
+  z-index: 9997;
+  border: 0;
+  font-size: 24px;
+  transition: all 0.4s;
+  outline: none !important;
+  background-color: #14dd25;
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all .4s ease;
+}
+.MenuClose{
+  position: fixed;
+  right: 15px;
+  top: 15px;
+  z-index: 9997;
+  border: 0;
+  font-size: 24px;
+  transition: all 0.4s;
+  outline: none !important;
+  color: #14dd25;
+  background-color: #fff;
+  width: 40px;
+  height: 40px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all .4s ease;
+  }
+.logos{
+  width:283px;
+  height:107px ;
+  margin-top:-20px;
+}
+
+
+
+@media (max-width: 800px) {
+  .grid {
+    width: 100%;
+    flex-direction: column;
+  }
+  .navbar{
+   position: fixed;
+   z-index: 9999;
+   margin-left: -999px;
+  transition: all .4s ease;
+  }
+  .navbarexp{
+    position: fixed;
+    z-index: 9999;
+    margin-left: 0px;
+    transition: all .4s ease;
+   }
+  .Menu, .MenuClose{
+    display: unset;
+    margin-top: 12px;
+    right: 8px;  
+  }
+  .logos{
+    width:142px;
+    height:54px ;
+    margin-top:-20px;
+   
+  }
+  .topper{
+    width: 100%;
+    z-index: 0;
+  }
+  .connect{
+    transform: translateX(-60px);
+  }
+}

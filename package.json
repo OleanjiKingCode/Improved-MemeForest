@@ -1,0 +1,39 @@
+{
+  "name": "meme-forest",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@bundlr-network/client": "^0.7.4",
+    "@fortawesome/fontawesome-svg-core": "^6.1.1",
+    "@fortawesome/free-brands-svg-icons": "^6.1.1",
+    "@fortawesome/free-regular-svg-icons": "^6.1.1",
+    "@fortawesome/free-solid-svg-icons": "^6.1.1",
+    "@fortawesome/react-fontawesome": "^0.1.18",
+    "@nomiclabs/hardhat-ethers": "^2.0.6",
+    "@nomiclabs/hardhat-waffle": "^2.0.3",
+    "@openzeppelin/contracts": "^4.6.0",
+    "@rainbow-me/rainbowkit": "^0.1.1",
+    "bootstrap": "^5.2.0-beta1",
+    "chai": "^4.3.6",
+    "dotenv": "^16.0.1",
+    "ethereum-waffle": "^3.4.4",
+    "ethers": "^5.6.7",
+    "hardhat": "^2.9.6",
+    "next": "12.1.6",
+    "react": "18.1.0",
+    "react-dom": "18.1.0",
+    "react-icons": "^4.4.0",
+    "wagmi": "^0.3.5",
+    "web3modal": "^1.9.7"
+  },
+  "devDependencies": {
+    "eslint": "8.16.0",
+    "eslint-config-next": "12.1.6"
+  }
+}

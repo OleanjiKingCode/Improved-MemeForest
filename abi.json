@@ -1,0 +1,749 @@
+[
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "MemeId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "MemeInfo",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "MemeCreator",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "IsMemeStarred",
+        "type": "bool"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "MemeStars",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "MemeLikes",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "DateOfCreation",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "Filetype",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "IsDownloadable",
+        "type": "bool"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "Membernum",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "NewNumberMemberMemes",
+        "type": "uint256"
+      }
+    ],
+    "name": "CreateMeme",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "MemeId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "CreatorId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "NewLikesNo",
+        "type": "uint256"
+      }
+    ],
+    "name": "LikingMeme",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "MemberId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "MemberName",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "Datejoined",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "MemberAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "MemberTotalMemes",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "MemberStarredMemes",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "MemberDeletedMemes",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "MemberTotalLikes",
+        "type": "uint256"
+      }
+    ],
+    "name": "Memberjoined",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "MemeId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "CreatorId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "NewStarNo",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "CreatorStarredMemes",
+        "type": "uint256"
+      }
+    ],
+    "name": "StarredMeme",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "MemeId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "CreatorId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "NewLikesNo",
+        "type": "uint256"
+      }
+    ],
+    "name": "UnLikingMeme",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "MemeId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "CreatorId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "NewStarNo",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "CreatorStarredMemes",
+        "type": "uint256"
+      }
+    ],
+    "name": "UnStarringMeme",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_name",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_date",
+        "type": "string"
+      }
+    ],
+    "name": "CreateMembers",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "memeinfo",
+        "type": "string"
+      },
+      {
+        "internalType": "address",
+        "name": "_owner",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "_date",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_filetype",
+        "type": "string"
+      },
+      {
+        "internalType": "bool",
+        "name": "_isDownloadable",
+        "type": "bool"
+      }
+    ],
+    "name": "CreateMemeItems",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_member",
+        "type": "address"
+      }
+    ],
+    "name": "GetMemberByAddr",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "Name",
+            "type": "string"
+          },
+          {
+            "internalType": "address",
+            "name": "MemeberAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "MyId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "MyMemes",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "MyStarredMemes",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "MyDeletedMemes",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "Datejoined",
+            "type": "string"
+          }
+        ],
+        "internalType": "struct MemeForest.MemeMembers[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      }
+    ],
+    "name": "IsAMember",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_id",
+        "type": "uint256"
+      }
+    ],
+    "name": "LikeMeme",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "NumOfAllMembers",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "_value",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "NumOfAllMemes",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "_value",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "NumberOfUploads",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_id",
+        "type": "uint256"
+      }
+    ],
+    "name": "RemoveStarMeme",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_id",
+        "type": "uint256"
+      }
+    ],
+    "name": "StarMeme",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_id",
+        "type": "uint256"
+      }
+    ],
+    "name": "UnLikeMeme",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_id",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      }
+    ],
+    "name": "WhatDidILike",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_id",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      }
+    ],
+    "name": "WhatDidIStar",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "fetchAllMemes",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "Memeinfo",
+            "type": "string"
+          },
+          {
+            "internalType": "address",
+            "name": "Owner",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "fileId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "starred",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint256",
+            "name": "Stars",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "Likes",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "DateOfCreation",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "FileType",
+            "type": "string"
+          },
+          {
+            "internalType": "bool",
+            "name": "IsDownloadable",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct MemeForest.MemeFiles[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "fetchMembers",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "Name",
+            "type": "string"
+          },
+          {
+            "internalType": "address",
+            "name": "MemeberAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "MyId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "MyMemes",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "MyStarredMemes",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "MyDeletedMemes",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "Datejoined",
+            "type": "string"
+          }
+        ],
+        "internalType": "struct MemeForest.MemeMembers[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      }
+    ],
+    "name": "fetchMyMeme",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "Memeinfo",
+            "type": "string"
+          },
+          {
+            "internalType": "address",
+            "name": "Owner",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "fileId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "starred",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint256",
+            "name": "Stars",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "Likes",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "DateOfCreation",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "FileType",
+            "type": "string"
+          },
+          {
+            "internalType": "bool",
+            "name": "IsDownloadable",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct MemeForest.MemeFiles[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      }
+    ],
+    "name": "fetchMyStarredMemes",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "Memeinfo",
+            "type": "string"
+          },
+          {
+            "internalType": "address",
+            "name": "Owner",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "fileId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "starred",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint256",
+            "name": "Stars",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "Likes",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "DateOfCreation",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "FileType",
+            "type": "string"
+          },
+          {
+            "internalType": "bool",
+            "name": "IsDownloadable",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct MemeForest.MemeFiles[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]
