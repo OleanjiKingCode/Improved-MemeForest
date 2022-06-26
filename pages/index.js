@@ -6,19 +6,12 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useContract, useProvider,useSigner,useAccount,useBalance,useConnect  } from 'wagmi'
 import {MemeForestAddress} from '../constant'
 import { useEffect, useRef, useState, useContext } from "react";
-import { MainContext } from '../context';
 import BigNumber from 'bignumber.js';
 import MEME from '../artifacts/contracts/MemeForest.sol/MemeForest.json'
 import { FaSpinner } from 'react-icons/fa';
 import { HiMenu } from "react-icons/hi";
 
 export default function Home() {
-  const {
-    initialize,
-    fetchBalance,
-    balance,
-    bundlrInstance
-  } = useContext(MainContext)
   const { data} = useAccount()
   const person = data?.address;
 
@@ -44,16 +37,16 @@ export default function Home() {
       contractInterface: MEME.abi,
       signerOrProvider: provider,
     })
-     
+    const balance = 1;
   useEffect(() => {
     
         PageLoad();
         if(!AMember){
            checkIfAMember();
         
-         setInterval( async () => {
-             await fetchByAddress()
-         }, 5*1000);
+        //  setInterval( async () => {
+        //      await fetchByAddress()
+        //  }, 5*1000);
         }
     }, [AMember]);
 
@@ -81,39 +74,6 @@ export default function Home() {
     }
   }
 
-  const Initialize = async () => {
-    try {
-      setLoading(true)
-      initialize();
-      
-      setHaveInitialised(true)
-      setLoading(false)
-    } catch (error) {
-      console.log(error)
-    }
-
-  
-  }
-
-  const  fundWallet = async () =>{
-    try {
-      setLoading(true)
-      if (!fund  ) return
-      const fundedamount = new BigNumber(fund).multipliedBy(bundlrInstance.currencyConfig.base[1])
-      if(fundedamount.isLessThan(1)){
-        window.alert("NOT ENOUGH")
-        return
-      }
-      
-     
-      const funded = await bundlrInstance.fund(fundedamount)
-      setLoading(false)
-      fetchBalance()
-      
-    } catch (error) {
-      console.log(error)
-    }
-   }
 
    const fetchByAddress = async () => {
     try {
@@ -126,7 +86,6 @@ export default function Home() {
           Date: i.Datejoined,
           Memes : i.MyMemes.toNumber(),
           Starred :i.MyStarredMemes.toNumber()
-         
         }
         return list
        }));
@@ -167,37 +126,12 @@ const renderButton = () => {
           Welcome to Meme Forest
         </h3>
         <br/>
-      <button onClick={Initialize}  style={{border:"none", textAlign:"center", 
-            padding:"10px 20px",color:"white",  fontSize:"10px", 
-            backgroundColor:"blue",marginTop:"20px",marginLeft:"20px", borderRadius:"10px"}}>
-              Initialize
-          </button>
              
         </div>
     )
   }
-  if( AMember &&  balance <= 0.01) {
-    
-    return (
-      <div style={{textAlign:"center",height:"80vh",top:"50%", left:"50%", display:"flex", alignItems:"center",justifyContent:"center" ,flexDirection:"column"}}>
-          You are a Now a member. <br/>
-          But funding is too small to work with.<br/>
-        <input
-          placeholder='Fund your wallet'
-          type="number"
-          onChange={e => setFund(e.target.value)}
-          style={{padding:"10px", border:"1px solid black" , marginLeft:"20px",borderRadius:"10px",width:"400px", fontSize:"10px"}}
-        />
-        <button onClick={fundWallet}  style={{border:"none", textAlign:"center", 
-          padding:"10px 20px",color:"white",  fontSize:"10px", 
-          backgroundColor:"blue",marginTop:"20px",marginLeft:"20px", borderRadius:"10px"}}>
-            Fund Wallet
-        </button>
-      </div>
-    )
-  
-  }
-  if(haveInitialised && balance > 0) {
+
+  if(AMember) {
     return(
       <div style={{fontSize:"19px", fontWeight:"700"}}>
         You are a member with Funding balance of {balance}

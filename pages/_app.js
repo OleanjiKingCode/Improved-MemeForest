@@ -12,11 +12,9 @@ import {
 } from '@rainbow-me/rainbowkit';
 import 'bootstrap/dist/css/bootstrap.css'
 import { chain, createClient, WagmiProvider } from 'wagmi';
-import {WebBundlr} from '@bundlr-network/client';
 import { useEffect, useRef, useState, useContext } from "react";
 import { fetchBalance } from '@wagmi/core';
 import { utils } from 'ethers';
-import { MainContext } from '../context';
 import { providers } from "ethers"
 import { HiMenu } from "react-icons/hi";
 import { BiX } from "react-icons/bi";
@@ -27,7 +25,7 @@ import { BiX } from "react-icons/bi";
 const { chains, provider } = configureChains(
   [chain.mainnet, chain.polygon, chain.polygonMumbai],
   [
-    apiProvider.alchemy(process.env.ALCHEMY_ID),
+    apiProvider.alchemy(process.env.ANKR_ID),
     apiProvider.fallback()
   ]
 );
@@ -43,44 +41,8 @@ const wagmiClient = createClient({
 
 function MyApp({ Component, pageProps }) {
   
-  const [bundlrInstance, setBundlrInstance] = useState()
-  const bundlrRef = useRef()
-  const [balance , setBalance] = useState(0)
   const [toggle,setToggle] = useState(false)
-    async function initialize(){
-      try {
-        await window.ethereum.enable()
-
-      const provider = new providers.Web3Provider(window.ethereum);
-      await provider._ready()
-      const bundlr = new WebBundlr(
-        "https://devnet.bundlr.network",
-        "matic",
-        provider,
-        {  providerUrl: "https://polygon-mumbai.g.alchemy.com/v2/seH0s7cQOTefJ8KKCf46st-T5cCl4ZBZ"}
-    );
-      await bundlr.ready()
-     
-      
-      setBundlrInstance(bundlr)
-      bundlrRef.current = bundlr
-      fetchBalance()
-      } catch (e) {
-        console.log(e)
-      }
-      
-    }
-
-    async function  fetchBalance() { 
-      try {
-        const bal = await bundlrRef.current.getLoadedBalance()
-
-        setBalance(utils.formatEther(bal.toString()))
-      } catch (error) {
-        console.log(error)
-      }
-     
-    }
+    
     const displayResult = () => {
       if (clicked && !toggle) {
          setToggle(true)
@@ -221,12 +183,6 @@ function MyApp({ Component, pageProps }) {
                 Creations
               </div>
             </Link>
-            
-            <Link href="/funds">
-              <div className={styles.hover}>
-                Funds
-              </div>
-            </Link>
             <Link href="/about">
               <div className={styles.hover}>
                 About
@@ -256,37 +212,15 @@ function MyApp({ Component, pageProps }) {
           <div className='col-md-12 ' style={{height:"100vh",overflow:"hidden",overflowY:"scroll",  width:"100%",padding:"0",position:"relative"}} >
             <WagmiProvider client={wagmiClient}>
               <RainbowKitProvider chains={chains}>
-                <MainContext.Provider value={{
-                  initialize,
-                  fetchBalance,
-                  balance,
-                  bundlrInstance
-                }}
-                >
                   <Component {...pageProps} />
-                </MainContext.Provider>
-               
               </RainbowKitProvider>
            </WagmiProvider>
           </div>
               </div>
          
           </div>
-
-          
         </div>
-        
       </div>
-
-
-
-
-
-
-
-
-    
-
     </div>
   )
 }

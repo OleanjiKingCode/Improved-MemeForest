@@ -3,27 +3,19 @@ import Web3Modal from "web3modal";
 import styles from '../styles/Home.module.css'
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useContract, useProvider,useSigner,useAccount  } from 'wagmi'
-import {MemeForestAddress} from '../constant'
+import {MemeForestAddress, Token} from '../constant'
 import { useEffect, useState, useContext } from "react";
-import { MainContext } from '../context';
 import MEME from '../artifacts/contracts/MemeForest.sol/MemeForest.json'
 import { useRouter } from 'next/router';
 import { FaSpinner } from 'react-icons/fa';
-
+import { Web3Storage } from 'web3.storage'
 
 
 export default function Create () {
 
-    const {
-        initialize,
-        fetchBalance,
-        balance,
-        bundlrInstance
-    } = useContext(MainContext)
     const { data} = useAccount()
     const person = data?.address;
     const [AMember,setAMember] = useState(false)
-    const [fileURL, setFileURL] = useState("")
     const [nameOfFile, setNameOfFile] = useState("")
     const [DescriptionOfFile, setDescriptionOfFile] = useState("")
     const [Image, setImage] = useState()
@@ -32,7 +24,6 @@ export default function Create () {
     const[IsVideo, setIsVideo] = useState(false)
     const[IsImage, setIsImage] = useState(false)
     const[valueExtension, setValueExtension] = useState("")
-
     const provider = useProvider()
     const [numberOfLoading, setNumberOfLoading] = useState(3)
     const { data: signer, isError, isLoading } = useSigner()
@@ -49,25 +40,11 @@ export default function Create () {
     })
     const counter = 1;
     const router = useRouter()
-    useEffect(() => { 
-        if(counter == 1){
-            initialize()
-          
-            counter +=1
-        }
-       
-    } ,[])
     useEffect(() => {
 
 
         if(!AMember){
             checkIfAMember();
-            
-            if (counter == 2) {
-                fetchBalanceOfMember();
-            }
-           
-        
         }
     }, [AMember]);
    
@@ -92,23 +69,14 @@ export default function Create () {
         }
     }
 
-    const fetchBalanceOfMember = async () => {
-        try {
-            const delay = ms => new Promise(res => setTimeout(res, ms));
-            await delay(5000);
-            fetchBalance();
-        } catch (error) {
-            console.log(error)
-        }
-    }
 
     const CreateMemes = async (memeInfo, valueExt) => {
         try {
         
          
             let time = new Date().toLocaleString();
-            
-            const create = await contractWithSigner.CreateMemeItems(memeInfo,person,time, valueExt)
+            let downloadable = true;
+            const create = await contractWithSigner.CreateMemeItems(memeInfo,person,time,valueExt,downloadable)
             setNumberOfLoading(1)
             await create.wait()
             setLoading(false)
@@ -119,26 +87,37 @@ export default function Create () {
         }
     }
 
+
+
+    function getAccessToken () {
+    
+    return Token;
+    }
+    
+    function makeStorageClient () {
+    return new Web3Storage({ token: getAccessToken() })
+    }
     const Uploading = async (valueExt) => {
         try {
             setLoading(true)
-           
-
-            let upload = await bundlrInstance.uploader.upload(Image, [{name: "Content-Type", value: valueExt}])
-            
-            setFileURL(`https://arweave.net/${upload.data.id}`)
-            const file = `https://arweave.net/${upload.data.id}`
-
+            console.log(client)
+            const client = makeStorageClient()
+            const file = new File([Image], 'image', { type: 'img/png' })
+            const cid = await client.put([file])
+            console.log("Stage One")
             const data = JSON.stringify ({
                 nameOfFile, 
                 DescriptionOfFile, 
-                image:file
+                image:cid
             })
             setNumberOfLoading(2)
-            let uploadTwo = await bundlrInstance.uploader.upload(data, [{name: "Content-Type", value: "text/plain"}])
-            const MemeInfo = `https://arweave.net/${uploadTwo.data.id}`
-           
-           
+            const blob = new Blob([data], { type: 'application/json' })
+            const files = [
+               
+                new File([blob], 'MemeInfo')
+              ]
+            const MemeInfo = await client.put(files)
+            console.log(":faiulegaiozkfiajetgjea9uuggopek90g90kierjf")
             CreateMemes(MemeInfo,valueExt);
             
         } catch (e) {
@@ -188,6 +167,7 @@ export default function Create () {
             }
             reader.readAsArrayBuffer(file)
         }
+        
         } catch (error) {
            console.log(error )
         }
@@ -208,7 +188,7 @@ export default function Create () {
             )
         }
         if(AMember){
-            if(balance > 0.01) {
+            if(counter) {
                 return( 
                     <div className={styles.Memebox} style={{borderRadius:"25px", padding:"20px", textAlign:"center",margin:"20px 0 20px 0" }}> 
                         <h3>

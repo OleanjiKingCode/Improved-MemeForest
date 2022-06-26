@@ -71,26 +71,31 @@ contract MemeForest is ReentrancyGuard{
 
     event StarredMeme (
         uint256 MemeId,
-        uint256 CreatorId,
         uint256 NewStarNo,
+        uint256 CreatorId,
+        address CreatorAddress,
         uint256 CreatorStarredMemes
     );
 
     event UnStarringMeme (
         uint256 MemeId,
-        uint256 CreatorId,
         uint256 NewStarNo,
+        uint256 CreatorId,
+        address CreatorAddress,
         uint256 CreatorStarredMemes
     );
     event LikingMeme (
         uint256 MemeId,
+        uint256 NewLikesNo,
         uint256 CreatorId,
-        uint256 NewLikesNo
+        address liker
     );
     event UnLikingMeme ( 
-        uint256 MemeId,
+       uint256 MemeId,
+        uint256 NewLikesNo,
         uint256 CreatorId,
-        uint256 NewLikesNo);
+        address Unliker
+        );
 
     function CreateMembers (string memory _name, string memory _date) public nonReentrant{
         require(alreadyAMember[msg.sender] == false, "You are already a member");
@@ -185,8 +190,9 @@ contract MemeForest is ReentrancyGuard{
         for (uint i = 0; i < currentMemberNum; i++) {
             if(_owner == IdMembers[i+1].MemeberAddress){
                 currentNum = IdMembers[i+1].MyId;
-                IdMembers[currentNum].MyMemes +=1;
-                newMemes =  IdMembers[currentNum].MyMemes;
+                newMemes = IdMembers[currentNum].MyMemes;
+                newMemes +=1;
+                IdMembers[currentNum].MyMemes = newMemes;
             }
         }
 
@@ -234,11 +240,10 @@ contract MemeForest is ReentrancyGuard{
         for(uint i = 0; i < currentMemeNum; i++){
             if(_id == IdMemeFiles[i+1].fileId) {
               
-                IdMemeFiles[i+1].Likes+=1;
                 newLikes = IdMemeFiles[i+1].Likes;
-                 DidyouLike[msg.sender][_id]= true;
-                
-               
+                newLikes +=1;
+                IdMemeFiles[i+1].Likes =  newLikes;
+                DidyouLike[msg.sender][_id]= true;  
             }
         }
         for (uint index = 0; index < currentMemberNum; index++) {
@@ -250,8 +255,9 @@ contract MemeForest is ReentrancyGuard{
     
         emit LikingMeme(
             _id,
+            newLikes,
             currentNum,
-            newLikes
+            msg.sender
         );
     }
     function UnLikeMeme(uint _id) public {
@@ -262,7 +268,9 @@ contract MemeForest is ReentrancyGuard{
         for(uint i = 0; i < currentMemeNum; i++){
             if(_id == IdMemeFiles[i+1].fileId) {
               
-                IdMemeFiles[i+1].Likes-=1;
+               newLikes = IdMemeFiles[i+1].Likes;
+                newLikes -=1;
+                IdMemeFiles[i+1].Likes =  newLikes;
                   DidyouLike[msg.sender][_id]= false;
                 
                
@@ -277,8 +285,9 @@ contract MemeForest is ReentrancyGuard{
     
         emit UnLikingMeme(
             _id,
+            newLikes,
             currentNum,
-            newLikes
+            msg.sender
         );
     }
     
@@ -296,8 +305,9 @@ contract MemeForest is ReentrancyGuard{
         for(uint i = 0; i < currentMemeNum; i++){
             if(_id == IdMemeFiles[i+1].fileId) {
                 IdMemeFiles[_id].starred = true;
-                IdMemeFiles[_id].Stars+=1;
-                newstars = IdMemeFiles[_id].Stars;
+                newstars=IdMemeFiles[_id].Stars;
+                newstars+=1;
+                IdMemeFiles[_id].Stars = newstars ;
                 DidyouStar[msg.sender][_id]= true;
                
                 
@@ -307,14 +317,16 @@ contract MemeForest is ReentrancyGuard{
         for (uint index = 0; index < currentMemberNum; index++) {
             if(msg.sender == IdMembers[index+1].MemeberAddress){
                 currentNum = IdMembers[index+1].MyId;
-                IdMembers[currentNum].MyStarredMemes +=1;
-                newstarredMemes = IdMembers[currentNum].MyStarredMemes;
+                newstarredMemes=IdMembers[currentNum].MyStarredMemes;
+                newstarredMemes +=1;
+                IdMembers[currentNum].MyStarredMemes = newstarredMemes;
             }
         }
         emit StarredMeme (
         _id,
-        currentNum,
         newstars, 
+        currentNum,
+        msg.sender,
         newstarredMemes );
     }
 
@@ -327,9 +339,10 @@ contract MemeForest is ReentrancyGuard{
         uint newstarredMemes;
         for(uint i = 0; i < currentMemeNum; i++){
             if(_id == IdMemeFiles[i+1].fileId) {
-                IdMemeFiles[_id].starred = true;
-                IdMemeFiles[_id].Stars-=1;
-                newstars = IdMemeFiles[_id].Stars;
+                IdMemeFiles[_id].starred = false;
+                newstars=IdMemeFiles[_id].Stars;
+                newstars-=1;
+                IdMemeFiles[_id].Stars = newstars ;
                 DidyouStar[msg.sender][_id]= false;
                
             }
@@ -337,15 +350,17 @@ contract MemeForest is ReentrancyGuard{
          for (uint index = 0; index < currentMemberNum; index++) {
             if(msg.sender == IdMembers[index+1].MemeberAddress){
                  currentNum = IdMembers[index+1].MyId;
-                IdMembers[currentNum].MyStarredMemes -=1;
-                newstarredMemes = IdMembers[currentNum].MyStarredMemes;
-            }
+                newstarredMemes=IdMembers[currentNum].MyStarredMemes;
+                newstarredMemes -=1;
+                IdMembers[currentNum].MyStarredMemes = newstarredMemes;
+             }
         }
         emit UnStarringMeme (
-            _id,
-            currentNum,
-            newstars,
-            newstarredMemes
+         _id,
+        newstars, 
+        currentNum,
+        msg.sender,
+        newstarredMemes
         );
     }
 
