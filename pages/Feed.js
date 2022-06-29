@@ -2,17 +2,61 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useContract, useProvider,useSigner,useAccount,useBalance,useConnect  } from 'wagmi'
-import {MemeForestAddress} from '../constant'
+import {MemeForestAddress,Token, ApiUriv} from '../constant'
 import { useEffect, useRef, useState, useContext } from "react";
 import MEME from '../artifacts/contracts/MemeForest.sol/MemeForest.json'
 import 'bootstrap/dist/css/bootstrap.css'
 import axios from "axios"
 import { FaSpinner } from 'react-icons/fa';
+import { createClient } from 'urql'
+import { Web3Storage } from 'web3.storage'
 
 
 
-export default function Feed () {
-   
+const MemesQuery= `
+query {
+    memes(
+    orderBy : Date ,
+    orderDirection: desc
+        ) 
+    {
+        id
+        MemeInfo
+        Owner
+        IsStarred
+        Stars
+        Likes
+        Date
+        FileType
+        IsDownloadable
+        StarredAddresses
+        LikesAddresses
+    }
+}
+`
+
+const MemberQuery= `
+query {
+  memebers{
+    Name
+    Adddress
+    TotalMeme
+    StarredMemes
+    Date
+  }
+}
+`
+
+const client = createClient({
+  url: ApiUriv,
+})
+
+
+export default function Feed (props) {
+    // console.log("props")
+    // console.log(props)
+    const Memeslength  = props.memes.length
+    const Memberslength  = props.members.length
     const { data} = useAccount()
     const person = data?.address;
     const [memes,setMemes] = useState([])
@@ -35,8 +79,9 @@ export default function Feed () {
     })
     useEffect(() => {
         
-            fetchAllMemes();
+           
             PageLoad();
+            FechMemeInfo(props)
     }, []);
 
     const PageLoad = async () =>{
@@ -45,59 +90,6 @@ export default function Feed () {
             const delay = ms => new Promise(res => setTimeout(res, ms));
             await delay(20000);
             setLoadingPage(false)
-        } catch (e) {
-            console.log(e)
-        }
-    }
-    const fetchAllMemes = async () => {
-        try {
-            const data= await contractWithProvider.fetchAllMemes();
-            const tx = await Promise.all(data.map(async i => {
-                const Info = await axios.get(i.Memeinfo)
-               
-                const StarAnswer= await contractWithProvider.WhatDidIStar(i.fileId,person);
-                
-                const LikeAnswer= await contractWithProvider.WhatDidILike(i.fileId,person);
-               
-               
-                
-                let List = {
-                    
-                    Name:Info.data.nameOfFile,
-                    AddressOfOwner : i.Owner,
-                    Id :i.fileId.toNumber(),
-                    File: Info.data.image,
-                    IsStarred:i.starred,
-                    NumberOfStars:i.Stars.toNumber(),
-                    NumberOfLikes:i.Likes.toNumber(),
-                    Date:i.DateOfCreation,
-                    FileType:i.FileType,
-                    Description:Info.data.DescriptionOfFile,
-                    DidMemberStarMe: StarAnswer,
-                    DidMemberLikeMe:LikeAnswer
-                   
-                }
-               
-                return List
-                
-            }));
-            setMemes(tx);
-            const delay = ms => new Promise(res => setTimeout(res, ms));
-                await delay(7000);
-            const ata= await contractWithProvider.fetchMembers();
-    
-            const txn = await Promise.all(ata.map(async i =>{
-               let list = {
-                Name : i.Name,
-                Address : i.MemeberAddress,
-                Date: i.Datejoined,
-                Memes : i.MyMemes.toNumber(),
-                Starred :i.MyStarredMemes.toNumber()
-               
-              }
-              return list
-             }));
-             setMemberDetails(txn)
         } catch (e) {
             console.log(e)
         }
@@ -170,47 +162,77 @@ export default function Feed () {
             console.log(e)
         }
     }
+    function getAccessToken () {
     
+        return Token;
+    }
+        
+    function makeStorageClient () {
+    return new Web3Storage({ token: getAccessToken() })
+    }
+    const FechMemeInfo = async (props) => {
+        console.log("files")
+        const client = makeStorageClient()
+        let data = props.memes;
+        const tx = await Promise.all(data.map(async i => {
+            const res = await client.get(i.MemeInfo) 
+            if(!res.ok) {
+                console.log("not okay bro")
+                return;
+            }
+            let files = await res.files()
+                const info =  await axios.get(`https://${files[0].cid}.ipfs.dweb.link`)
+                let List = {
+                    Name:info.data.nameOfFile,
+                    Description:info.data.DescriptionOfFile,
+                    image:info.data.image,
+                    Owner: i.Owner,
+                    IsStarred:i.IsStarred,
+                    NumberOfStars:i.Stars,
+                    NumberOfLikes:i.Likes,
+                    Date:i.Date,
+                    Id :i.id,
+                    IsDownloadable : i.IsDownloadable,
+                    FileType :i.FileType
+                }
+                return List
+        })); 
+         console.log(tx)
+        setMemberDetails(tx)
+    }
     const renderButton = () => {
         
-        if (memes.length >0){
+        if (Memeslength>0){
             return(
                 <div className='row d-flex' style={{flexDirection:"row"}}>
                     {
-                        memes.map((card,i) => {
+                        memberDetails.map((card,i) => {
                             return(  
-                                <div key={i} className='col-md-3 p-3'>   
+                                <div key={i} className='col-md-3 p-3'>
                                     {
-
-                                        (!card.Name == " " && !card.Description == " ") &&
-
-                                            <div className={styles.Memebox} style={{borderRadius:"25px", height:"auto",padding:"10px"}}>
-                                                <div className={styles.upperimg}  style={{borderRadius:"15px",height:"150px",overflow:"hidden", flexDirection:"column"/*, backgroundImage:`url(${card.File})`, backgroundSize:"cover",backgroundPosition:"center"*/}}>
+                                          <div className={styles.Memebox} style={{borderRadius:"25px", height:"auto",padding:"10px"}}>
+                                                <div className={styles.upperimg}  style={{borderRadius:"15px",height:"150px",overflow:"hidden", flexDirection:"column"}}>
                                                     <a href={card.File} target='_blank' rel="noreferrer" style={{padding:"0", margin:"0", textDecoration:"none", }}>  
                                                        {
                                                            (card.FileType == "img/png") ?
                                                            (
-                                                            <img src={card.File} className={styles.change} alt="..." style={{height:"150px",width:"auto",}}/>
+                                                            <img src={`https://${card.image}.ipfs.dweb.link/image`}  className={styles.change} alt="..." style={{height:"150px",width:"auto",}}/>
                                                            )
                                                            :
                                                            (
-                                                            <video src={card.File} className={styles.change} width="500px" height="500px"  controls="controls"/> 
+                                                            <video src={`https://${card.image}.ipfs.dweb.link/image`}  className={styles.change} width="500px" height="500px"  controls="controls"/> 
                                                            )
-                                                       }
+                                                       } 
                                                        
-                                                            
-                                                           
-                                                        {/*  */}
                                                     </a>
                                                     <div className={styles.nameOfOwner} >
                                                         {
-                                                            memberDetails.map((lists,i) => {
-                                                                
+                                                            props.members.map((lists,i) => {
                                                                 return(
                                                                     
                                                                     <div key={i}  style={{fontSize:"14px",fontWeight:"500"}}>
                                                                     {
-                                                                        lists.Address == card.AddressOfOwner &&
+                                                                        lists.Adddress == card.Owner &&
                                                                         <div>
                                                                             {lists.Name}
                                                                         </div>
@@ -231,19 +253,20 @@ export default function Feed () {
                                                 <div className='py-2 px-3' style={{borderRadius:"25px",border:"1px black solid",height:"auto",marginTop:"10px"}}>
                                                     <div className='d-flex justify-content-between ' >
                                                         
-                                                            {
-                                                                card.Name.length > 7 ?
-                                                                (
-                                                                    <div style={{borderRadius:"10px",width:"130px",height:"25px",marginTop:"20px", fontWeight:"900",fontSize:"12px"}}>
-                                                                        {card.Name}
-                                                                    </div> 
-                                                                ) : 
-                                                                (
-                                                                    <div style={{borderRadius:"10px",width:"130px",height:"25px",marginTop:"20px", fontWeight:"700",fontSize:"18px"}}>
-                                                                        {card.Name}
-                                                                    </div> 
-                                                                )
-                                                            }
+                                                    {
+                                                            card.Name.length > 7 ?
+                                                        (
+                                                            <div style={{borderRadius:"10px",width:"130px",height:"25px",marginTop:"20px", fontWeight:"900",fontSize:"12px"}}>
+                                                                {card.Name}
+                                                            </div> 
+                                                        ) : 
+                                                        (
+                                                            <div style={{borderRadius:"10px",width:"130px",height:"25px",marginTop:"20px", fontWeight:"700",fontSize:"18px"}}>
+                                                                  {card.Name}
+                                                            </div> 
+                                                        )
+
+                                                     }
                                                         
                                                         <div className={styles.download} style={{borderRadius:"10px",display:"flex",alignItems:"center",justifyContent:"center",width:"40px",height:"40px"}}>
                                                         <a href={card.File} download target='_blank' rel="noreferrer" onClick={(e) =>download(card.File,card.Name)}>  
@@ -295,7 +318,7 @@ export default function Feed () {
                                                                                   
                                                                                    <>
                                                                                    <img src='./filledStar.png' alt='STAR'  style={{width:"20px",height:"20px"}}  />
-                                                                                   {card.NumberOfStars}
+                                                                                   {card.Stars}
                                                                                    </>
                                                                                ) 
                                                                                :
@@ -303,7 +326,7 @@ export default function Feed () {
                                                                                    
                                                                                    <>
                                                                                    <img src='./strokeStar.png' alt='STAR' style={{width:"20px",height:"20px"}}  />
-                                                                                   {card.NumberOfStars}
+                                                                                   {card.Stars}
                                                                                    </>
                                                                                )
                                                                         
@@ -337,7 +360,7 @@ export default function Feed () {
                                                                                 (
                                                                                     <>
                                                                                     <img src='./filledLove.png' alt='STAR'  style={{width:"20px",height:"20px"}}  />
-                                                                                    {card.NumberOfLikes}
+                                                                                    {card.Likes}
                                                                                     </>
                                                                                 ) 
                                                                                 :
@@ -345,7 +368,7 @@ export default function Feed () {
                                                                                     
                                                                                     <>
                                                                                             <img src='./UnfilledLove.png' alt='STAR' style={{width:"20px",height:"20px"}}  />
-                                                                                            {card.NumberOfLikes}
+                                                                                            {card.Likes}
                                                                                             </>
                                                                                 )
                                                                             }
@@ -420,3 +443,27 @@ export default function Feed () {
         </div>
       )
 }
+
+async function GetData() {
+    const data = await client.query(MemesQuery).toPromise()
+    // const info = await client.query(MemberQuery).toPromise()
+    console.log(data)
+    return (data.data.memes)
+  }
+  async function MemInfo() {
+    // const data = await client.query(MemesQuery).toPromise()
+    const info = await client.query(MemberQuery).toPromise()
+    console.log(info)
+    return (info.data.memebers)
+  }
+  
+  export async function getServerSideProps() {
+    const data = await GetData()
+    const info = await MemInfo()
+    return{
+      props:{
+        memes:data,
+        members:info
+      }
+    }
+  }
