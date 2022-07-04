@@ -53,8 +53,6 @@ const client = createClient({
 
 
 export default function Feed (props) {
-    // console.log("props")
-    // console.log(props)
     const Memeslength  = props.memes.length
     const Memberslength  = props.members.length
     const { data} = useAccount()
@@ -63,6 +61,8 @@ export default function Feed (props) {
     const[loadingStar, setLoadingStar] = useState(false)
     const[memberDetails,setMemberDetails] = useState([])
     const[loadingLike, setLoadingLike] = useState(false)
+    const[DidIStarMeme, SetDidIStarMeme] =useState(false)
+    const[DidILikeMeme, SetDidILikeMeme] =useState(false)
     const provider = useProvider()
     const { data: signer} = useSigner()
     const[loadingpage,setLoadingPage] = useState(false)
@@ -120,8 +120,9 @@ export default function Feed (props) {
     }
     const download = (e,name) => {
         try {
+            const Link = `https://${e}.ipfs.dweb.link/image`
             axios({
-                url: e, //your url
+                url: Link, //your url
                 method: 'GET',
                 responseType: 'blob', // important
             }).then((response) => {
@@ -136,9 +137,6 @@ export default function Feed (props) {
         } catch (error) {
             console.log(error)
         }
-        
-        
-         
       };
     const LikeMeme = async (id,bool) =>{
         try {
@@ -171,14 +169,36 @@ export default function Feed (props) {
     return new Web3Storage({ token: getAccessToken() })
     }
     const FechMemeInfo = async (props) => {
-        console.log("files")
         const client = makeStorageClient()
         let data = props.memes;
         const tx = await Promise.all(data.map(async i => {
             const res = await client.get(i.MemeInfo) 
             if(!res.ok) {
-                console.log("not okay bro")
                 return;
+            }
+            const LikesAddress = i.LikesAddresses;
+            const StarredAddress = i.StarredAddresses;
+            for (let i = 0; i < LikesAddress.length; i++) {
+                const Address = person.toLowerCase()
+                const CurrentAddress = LikesAddress[i]
+                if(Address == CurrentAddress ){
+                    SetDidILikeMeme(true)
+                }
+                else{
+                    SetDidILikeMeme(false)
+                }
+                
+            }
+            for (let i = 0; i < StarredAddress.length; i++) {
+                const Address = person.toLowerCase()
+                const CurrentAddress = StarredAddress[i]
+                if(Address == CurrentAddress ){
+                    SetDidIStarMeme(true)
+                }
+                else{
+                    SetDidIStarMeme(false)
+                }
+                
             }
             let files = await res.files()
                 const info =  await axios.get(`https://${files[0].cid}.ipfs.dweb.link`)
@@ -197,7 +217,6 @@ export default function Feed (props) {
                 }
                 return List
         })); 
-         console.log(tx)
         setMemberDetails(tx)
     }
     const renderButton = () => {
@@ -267,119 +286,86 @@ export default function Feed (props) {
                                                         )
 
                                                      }
-                                                        
-                                                        <div className={styles.download} style={{borderRadius:"10px",display:"flex",alignItems:"center",justifyContent:"center",width:"40px",height:"40px"}}>
-                                                        <a href={card.File} download target='_blank' rel="noreferrer" onClick={(e) =>download(card.File,card.Name)}>  
-                                                        <img src='./arrow.png' alt='' style={{width:"20px", height:"20px"}} />
-                                                        </a>
+                                                        {
+                                                            card.IsDownloadable &&
+                                                            <div className={styles.download} style={{borderRadius:"10px",display:"flex",alignItems:"center",justifyContent:"center",width:"40px",height:"40px"}}>
+                                                                <a href={`https://${card.image}.ipfs.dweb.link/image`} download target='_blank' rel="noreferrer" onClick={(e) =>download(card.image,card.Name)}>  
+                                                                <img src='./arrow.png' alt='' style={{width:"20px", height:"20px"}} />
+                                                                </a>
                                                        
-                                                        </div>
+                                                             </div>
+                                                        }
+                                                        
                                                     </div>
                                                     
                                                     <div style={{borderRadius:"10px",width:"190px",height:"auto",marginTop:"13px",fontSize:"14px"}}>
                                                         {card.Description} 
                                                     </div>
-                                                    <div className='d-flex justify-content-between ' >
-                                                    
-                                                        
+                                                    <div className='d-flex justify-content-between'>
+                                                        <button className={styles.ToggleButton} onClick={() => StarMeme(card.Id, card.DidMemberStarMe)}
+                                                            style={{borderRadius:"5px",border:"1px black solid",width:"90px",height:"30px",marginTop:"13px",display:"flex",alignItems:"center", justifyContent:"space-around"}}>
                                                             {
                                                                 loadingStar ? 
                                                                 (
                                                                     <button className={styles.ToggleButtonLoading} 
-                                                                    style={{borderRadius:"5px",border:"1px black solid",width:"90px",height:"30px",marginTop:"13px",display:"flex",alignItems:"center", justifyContent:"space-around"}}>
-                                                                <h4>
-                                                                <FaSpinner icon="spinner" className={styles.spinner} />
-                                                                </h4>
+                                                                        style={{borderRadius:"5px",border:"1px black solid",width:"90px",height:"30px",marginTop:"13px",display:"flex",alignItems:"center", justifyContent:"space-around"}}>
+                                                                        <h4>
+                                                                        <FaSpinner icon="spinner" className={styles.spinner} />
+                                                                        </h4>
                                                                     </button>
                                                                 ) 
                                                                 : 
                                                                 (
-                                                                    
-                                                                   
-                                                                    <button className={styles.ToggleButton} onClick={() => StarMeme(card.Id, card.DidMemberStarMe)}
-                                                                    style={{borderRadius:"5px",border:"1px black solid",width:"90px",height:"30px",marginTop:"13px",display:"flex",alignItems:"center", justifyContent:"space-around"}}>
-                                                                   {
-                                                                   // This was complicated for me when getting the logic lol
-                                                                        // so whatrs happening here is we wanna know 3 things: 
-                                                                        // Did I star this Meme?
-                                                                        // What Did I Star?
-                                                                        // Who starred this Meme?
-                                                                        // so i asnwer these questions by checking if the cuurent user has starred this meme
-                                                                        
-                                                                        //     so i check using the id whether this person starred it already them if so show that 
-                                                                        //     it has been starred then if not check if i clicked the button 
-                                                                        //     if i did then show starred star 
-                                                                        //     if i have never starred this item before and i didnt click the button then show empty star
-
-                                                                        
-
-                                                                            (card.DidMemberStarMe == true) ?
-                                                                               (
-                                                                                  
-                                                                                   <>
-                                                                                   <img src='./filledStar.png' alt='STAR'  style={{width:"20px",height:"20px"}}  />
-                                                                                   {card.Stars}
-                                                                                   </>
-                                                                               ) 
-                                                                               :
-                                                                               (
-                                                                                   
-                                                                                   <>
-                                                                                   <img src='./strokeStar.png' alt='STAR' style={{width:"20px",height:"20px"}}  />
-                                                                                   {card.Stars}
-                                                                                   </>
-                                                                               )
-                                                                        
-                                                                   }
-                                                                    </button>
-                                                                   
-                                                                )
-                                                            }
-                                                            
-                                                            
-                                                       
-                                                       
-                                                       
-                                                                {
-                                                                    loadingLike?
+                                                                    DidIStarMeme ?
                                                                     (
-                                                                        
-                                                                        <button className={styles.ToggleButton2Loading}  
-                                                                        style={{borderRadius:"5px",border:"1px black solid",width:"90px",height:"30px",marginTop:"13px",display:"flex",alignItems:"center", justifyContent:"space-around"}}>
-                                                                            <h4>
-                                                                                <FaSpinner icon="spinner" className={styles.spinner} />
-                                                                            </h4>
-                                                                        </button>
+                                                                        <>
+                                                                        <img src='./filledStar.png' alt='STAR'  style={{width:"20px",height:"20px"}}  />
+                                                                        {card.Stars}
+                                                                        </>
                                                                     ) 
                                                                     :
                                                                     (
-                                                                        <button className={styles.ToggleButton2}  onClick={() => LikeMeme(card.Id, card.DidMemberLikeMe)}
-                                                                        style={{borderRadius:"5px",border:"1px black solid",width:"90px",height:"30px",marginTop:"13px",display:"flex",alignItems:"center", justifyContent:"space-around"}}>
-                                                                            {
-                                                                                (card.DidMemberLikeMe == true) ?
-                                                                                (
-                                                                                    <>
-                                                                                    <img src='./filledLove.png' alt='STAR'  style={{width:"20px",height:"20px"}}  />
-                                                                                    {card.Likes}
-                                                                                    </>
-                                                                                ) 
-                                                                                :
-                                                                                (
-                                                                                    
-                                                                                    <>
-                                                                                            <img src='./UnfilledLove.png' alt='STAR' style={{width:"20px",height:"20px"}}  />
-                                                                                            {card.Likes}
-                                                                                            </>
-                                                                                )
-                                                                            }
-                                                                         </button>
+                                                                        <>
+                                                                        <img src='./strokeStar.png' alt='STAR' style={{width:"20px",height:"20px"}}  />
+                                                                        {card.Stars}
+                                                                        </>
                                                                     )
-                                                                }
-                                                                
-                                                                
-                                                                
-                                                                    
-                                                       
+                                                                )
+                                                            }
+                                                        </button>
+                                                       <button className={styles.ToggleButton2}  onClick={() => LikeMeme(card.Id, card.DidMemberLikeMe)}
+                                                            style={{borderRadius:"5px",border:"1px black solid",width:"90px",height:"30px",marginTop:"13px",display:"flex",alignItems:"center", justifyContent:"space-around"}}>
+                                                                {
+                                                                loadingLike?
+                                                                (
+                                                                    <button className={styles.ToggleButton2Loading}  
+                                                                    style={{borderRadius:"5px",border:"1px black solid",width:"90px",height:"30px",marginTop:"13px",display:"flex",alignItems:"center", justifyContent:"space-around"}}>
+                                                                        <h4>
+                                                                            <FaSpinner icon="spinner" className={styles.spinner} />
+                                                                        </h4>
+                                                                    </button>
+                                                                ) 
+                                                                :
+                                                                (
+                                                                    DidILikeMeme ?
+                                                                        (
+                                                                            
+                                                                            <>
+                                                                                <img src='./filledLove.png' alt='STAR'  style={{width:"20px",height:"20px"}}  />
+                                                                                {card.Likes}
+                                                                            </>
+                                                                        ) 
+                                                                        :
+                                                                        (
+                                                                            <>
+                                                                                <img src='./UnfilledLove.png' alt='STAR' style={{width:"20px",height:"20px"}}  />
+                                                                                {card.Likes}
+                                                                            </>
+                                                                        )
+                                                                )
+                                                            }
+                                                        </button>
+                                                        
                                                     </div>
                                                     
                                                 </div>
@@ -420,40 +406,30 @@ export default function Feed (props) {
     }
 
     return (
-        <div className={styles.container}>
-          <Head>
-            <title>Home</title>
-            <meta name="description" content="By Oleanji" />
-            <link rel="icon" href="/favicon.ico" />
-          </Head>
-        <div className={styles.topper} >
-        <img src='./LogoForest.png'  style={{width:"283px", height:"107px", marginTop:"-20px"}}/>
-          <div className={styles.connect}>
-            <ConnectButton />
-          </div>
-        </div>
-        <div style={{padding:"120px 20px 20px 20px"}}> 
-       
-          {renderButton()}
-        
-
-      </div>
-    
-          
+        <div>
+            <Head>
+                <title>Home</title>
+                <meta name="description" content="By Oleanji" />
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
+            <img src='./LogoForest.png'  style={{width:"283px", height:"107px", marginTop:"-20px"}}/>
+            <div>
+                <ConnectButton />
+            </div>
+            <div> 
+                {renderButton()}
+            </div>
         </div>
       )
 }
 
 async function GetData() {
     const data = await client.query(MemesQuery).toPromise()
-    // const info = await client.query(MemberQuery).toPromise()
-    console.log(data)
     return (data.data.memes)
   }
   async function MemInfo() {
-    // const data = await client.query(MemesQuery).toPromise()
+   
     const info = await client.query(MemberQuery).toPromise()
-    console.log(info)
     return (info.data.memebers)
   }
   

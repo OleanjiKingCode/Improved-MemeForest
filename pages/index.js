@@ -87,8 +87,6 @@ const renderButton = () => {
   return(
   <div>
       <div style={{fontSize:"19px", fontWeight:"700"}}>
-        Welcome 
-        <br/> <br/>
         {
           props.members.map((lists,i) => {
             
@@ -144,36 +142,29 @@ const renderButton = () => {
                    )
                    :
                    (
-                    <div style={{textAlign:"center",height:"80vh",top:"50%", left:"50%", display:"flex", alignItems:"center",justifyContent:"center" ,flexDirection:"column"}}>
-                    <h2 style={{}}>
-                      Welcome To MemeForest
-                    </h2>
-                    <input
-                      placeholder='Enter Any Name'
-                      type="text"
-                      onChange={e => setName(e.target.value)}
-                      style={{padding:"10px", border:"1px solid black" , borderRadius:"10px",width:"400px", fontSize:"10px"}}
-                    />
-                    
-                    {
-                      loading? 
-                        (
-                          <button   style={{border:"none", textAlign:"center", 
-                              padding:"10px 20px",color:"white",  fontSize:"10px", 
-                              backgroundColor:"blue",marginTop:"20px", marginLeft:"20px", borderRadius:"10px"}}>
-                              <FaSpinner icon="spinner" className={styles.spinner} />
-                          </button>
-                        ) 
-                        :
-                        (
-                          <button onClick={joinMembership}  style={{border:"none", textAlign:"center", 
-                            padding:"10px 20px",color:"white",  fontSize:"10px", 
-                            backgroundColor:"blue",marginTop:"20px", marginLeft:"20px", borderRadius:"10px"}}>
-                              Become A Member
-                          </button>    
-                        )
-                    }       
-                </div>
+                    <div className='flex items-center w-full h-screen'> 
+                    <div className='flex items items-center w-full  space-x-20 h-full '>
+                        <div className=' flex w-1/2  ml-4'>
+                        </div>
+                        <div className='flex flex-column items-center w-2/5 space-y-6 p-20 mx-10 mt-10'>
+                            <div className='flex items-center text-3xl text-black font-bold'>
+                              Welcome To NFT <span className='text-green-500'> Air </span>
+                            </div>
+                            <div className='text-sm text-gray-400'>
+                              Register to become a Member
+                            </div>
+                            <div className='pt-2 w-full'>
+                              <input className='px-2 py-1 h-10 font-semibold text-sm w-full border rounded-xl ' placeholder='Enter your Name'/>
+                            </div>
+                            <div className='flex items-center w-full'>
+                              <button className='text-lg text-gray-50  font-semibold w-full py-2 bg-green-500 hover:bg-gray-50 hover:text-green-500 border hover:border-slate-100 rounded-xl'
+                              onClick={joinMembership}>
+                                Register
+                              </button>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
                    )
                     
                    
@@ -193,25 +184,18 @@ const renderButton = () => {
 
 
   return (
-    <div className={styles.container}>
+    <div>
       <Head>
         <title>Home</title>
         <meta name="description" content="By Oleanji" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-    <div className={styles.topper}>
-     
-      <img src='./LogoForest.png' className={styles.logos}/>
-      <div className={styles.connect}>
-        <ConnectButton />
-      </div>
-    </div>
-      <div  className={styles.main}> 
+      {/* <div  className={styles.main}>  */}
         
-      {renderButton()}
+       {renderButton()}
         
 
-      </div>
+      {/* </div> */}
 
       
     </div>
