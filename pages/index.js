@@ -97,56 +97,56 @@ const renderButton = () => {
                     
                    ( lists.Adddress == Address )?
                    (
-                    <div style={{fontSize:"19px", fontWeight:"700"}}>
-                    You are a member 
-                    <br/> <br/>
-                   
-                            
-                            <div key={i}  style={{fontSize:"20px", fontWeight:"700"}}>
-                              
-                                <div>
-                                <div style={{ padding:"30px 10px", display:"flex", alignItems:"center"}} > 
-                                Name: 
-                               <span style={{fontSize:"18px" ,fontWeight:"400", marginTop:"5px " ,marginLeft:"20px"}}>
+                    <div className='flex flex-col w-full items-center justify-between space-y-20'>
+                      <div className='shadow-sm w-full bg-red-300'>
+                        <div className='flex flex-col items-center w-full'>
+                          <div className='border border-slate-400 flex flex-col md:flex-row items-center w-full'>
+                            <div className="w-full basis-1/5 p-4">
+                              <div className='rounded-lg border border-red-400 h-full p-20' >
+                                  01
+                              </div>
+                            </div>
+                            <div className="flex flex-col justify-between w-full basis-4/5 space-y-6 p-10 mr-4 ">
+                              <div className=' flex items-start text-3xl w-3/6 font-semibold hover:cursor-pointer text-black border-b border-slate-900 '>
+                                <span className='pb-2'>
                                 {lists.Name}
                                 </span>
-                               
-                               </div>
-                               <div style={{ padding:"30px 10px"}}> 
-                                Address: 
-                                <span style={{fontSize:"18px" ,fontWeight:"400", marginTop:"5px " ,marginLeft:"20px"}}>
-                                {lists.Adddress}
-                                </span>
-                               </div>
-                               <div style={{ padding:"30px 10px"}}> 
-                                 Number of Uploads: 
-                                 <span style={{fontSize:"18px" ,fontWeight:"400", marginTop:"5px " ,marginLeft:"20px"}}>
-                                 {lists.Memes}
-                                 </span>
-                               </div>
-                               <div style={{ padding:"30px 10px"}}>
-                                 Number Of Starred Memes:
-                                 <span style={{fontSize:"18px" ,fontWeight:"400", marginTop:"5px " ,marginLeft:"20px"}}>
-                                  {lists.Starred} </span>
+                              </div>
+                              <div className='flex justify-between  text-lg font-thin hover:cursor-pointer text-black  pt-10'>
+                                <div className='flex items-end text-lg font-medium '>
+                                    {lists.Adddress}
                                 </div>
-                               <div style={{ padding:"30px 10px"}}> 
-                                Date Joined: 
-                                <span style={{fontSize:"18px" ,fontWeight:"400", marginTop:"5px " ,marginLeft:"20px"}}>
-                                {lists.Date} </span>
-                               </div>
+                                <div className='flex flex-col text-lg  '>
+                                  <span className='font-medium'> Date Joined</span>
+                                  <span className='font-normal'> {lists.Date}</span>
                                 </div>
-                             
-                              
+                              </div>
                             </div>
-                  </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className='flex flex-col items-center w-full'>
+                        <div className='flex justify-between space-x-6 hover:cursor-pointer'>
+                          <div className='flex flex-col items-center p-10 bg-red-300 hover:bg-gray-50 rounded-lg border border-black '>
+                            <span className='font-medium '> Number Of Starred Memes</span>
+                            <span className='font-normal'> {lists.StarredMemes}</span>
+                          </div>
+                          <div className='flex flex-col  items-center p-10 bg-red-300 hover:bg-gray-50 rounded-lg border border-black'>
+                            <span className='font-medium'> Number Of Total Memes</span>
+                            <span className='font-normal'> {lists.TotalMeme}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                    )
                    :
                    (
-                    <div className='flex items-center w-full h-screen'> 
-                    <div className='flex items items-center w-full  space-x-20 h-full '>
-                        <div className=' flex w-1/2  ml-4'>
+                  <div className='flex items-center w-full h-full border border-slate-900 z-0'> 
+                    <div className=' flex flex-col md:flex-row items-center w-full h-full '>
+                        <div className='w-full basis-3/5 md:ml-4 mt-4 md:mt-0'>
+                          01
                         </div>
-                        <div className='flex flex-column items-center w-2/5 space-y-6 p-20 mx-10 mt-10'>
+                        <div className='flex flex-column items-center w-full basis-2/5 space-y-6 p-20 mr-4 mt-10'>
                             <div className='flex items-center text-3xl text-black font-bold'>
                               Welcome To NFT <span className='text-green-500'> Air </span>
                             </div>
@@ -190,14 +190,9 @@ const renderButton = () => {
         <meta name="description" content="By Oleanji" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {/* <div  className={styles.main}>  */}
-        
+      <div  className='h-24 w-full'> 
+      </div>
        {renderButton()}
-        
-
-      {/* </div> */}
-
-      
     </div>
   )
 }

@@ -10,12 +10,12 @@ import { BiX } from "react-icons/bi";
 function Navbar () {
     const [openMenu,setOpenMenu] = useState(false)
     return (
-        <nav className='shadow-md fixed w-full z-1000 '>
+        <nav className='shadow-md fixed w-full z-50  '>
                 <div className='flex items-center bg-white h-24 rounded-b-lg w-full' >
-                    <div className='flex items items-center w-full mx-20 justify-between'>
+                    <div className='flex items items-center w-full mx-5 md:mx-20 justify-between'>
                         <div className='flex items-center justify-center '>
                             <h1 className='font-bold text-2xl cursor-pointer'>
-                                NFT <span className='text-green-400'> AIR</span>
+                                <span className='text-orange-500 '> NFT</span> <span className='text-green-400'> AIR</span>
                             </h1>
                         </div>
                         <div className='hidden md:block'>
