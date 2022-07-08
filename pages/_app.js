@@ -37,7 +37,9 @@ function MyApp({ Component, pageProps }) {
       <RainbowKitProvider chains={chains}>
       <div className=''>
         <Navbar/>
-          <Component {...pageProps} />
+        <div  className='h-24 w-full'>
+        </div>
+          <Component {...pageProps} /> 
         </div>
       </RainbowKitProvider>
     </WagmiProvider>

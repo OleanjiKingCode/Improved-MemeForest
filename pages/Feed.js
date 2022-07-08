@@ -223,33 +223,33 @@ export default function Feed (props) {
         
         if (Memeslength>0){
             return(
-                <div className='row d-flex' style={{flexDirection:"row"}}>
+                <div className='grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-4 px-5 py-2 ' >
                     {
                         memberDetails.map((card,i) => {
                             return(  
-                                <div key={i} className='col-md-3 p-3'>
+                                <div key={i} className='w-full shadow-md p-3 rounded-3xl bg-gray-50 '>
                                     {
-                                          <div className={styles.Memebox} style={{borderRadius:"25px", height:"auto",padding:"10px"}}>
-                                                <div className={styles.upperimg}  style={{borderRadius:"15px",height:"150px",overflow:"hidden", flexDirection:"column"}}>
-                                                    <a href={card.File} target='_blank' rel="noreferrer" style={{padding:"0", margin:"0", textDecoration:"none", }}>  
+                                          <div className='flex flex-col' >
+                                                <div className='group flex flex-row items-center justify-center overflow-hidden rounded-lg '  >
+                                                    <a href={card.File} target='_blank' rel="noreferrer" >  
                                                        {
                                                            (card.FileType == "img/png") ?
                                                            (
-                                                            <img src={`https://${card.image}.ipfs.dweb.link/image`}  className={styles.change} alt="..." style={{height:"150px",width:"auto",}}/>
+                                                            <img src={`https://${card.image}.ipfs.dweb.link/image`}  className='w-full rounded-lg h-36 group-hover:scale-150 transition ease duration-300' alt="..." />
                                                            )
                                                            :
                                                            (
-                                                            <video src={`https://${card.image}.ipfs.dweb.link/image`}  className={styles.change} width="500px" height="500px"  controls="controls"/> 
+                                                            <video src={`https://${card.image}.ipfs.dweb.link/image`}  className='w-full rounded-lg h-36 group-hover:scale-150 transition ease duration-300' alt="..."  width="500px" height="500px"  controls="controls"/> 
                                                            )
                                                        } 
                                                        
                                                     </a>
-                                                    <div className={styles.nameOfOwner} >
+                                                    <div className=' hidden p-1 rounded-lg bg-gray-700 text-gray-100 font-medium text-xs group-hover:inline absolute self-start  ' >
                                                         {
                                                             props.members.map((lists,i) => {
                                                                 return(
                                                                     
-                                                                    <div key={i}  style={{fontSize:"14px",fontWeight:"500"}}>
+                                                                    <div key={i}  >
                                                                     {
                                                                         lists.Adddress == card.Owner &&
                                                                         <div>
@@ -262,25 +262,25 @@ export default function Feed (props) {
                                                         
                                                         }
                                                     </div>
-                                                    <div className={styles.dateOfMeme} >
+                                                    <div className='hidden p-1 rounded-lg bg-gray-700 text-gray-100 font-thin text-xs group-hover:inline absolute self-end'  >
                                                         {
                                                             card.Date
                                                         
                                                         }
                                                     </div>
                                                </div>
-                                                <div className='py-2 px-3' style={{borderRadius:"25px",border:"1px black solid",height:"auto",marginTop:"10px"}}>
-                                                    <div className='d-flex justify-content-between ' >
+                                                <div className='py-2 px-3 border-2 border-gray-500 h-auto mx-2 mt-4 rounded-lg' >
+                                                    <div className='grid grid-rows grid-flow-col gap-1  ' >
                                                         
                                                     {
                                                             card.Name.length > 7 ?
                                                         (
-                                                            <div style={{borderRadius:"10px",width:"130px",height:"25px",marginTop:"20px", fontWeight:"900",fontSize:"12px"}}>
+                                                            <div className='flex items-end row-start-2 row-span-2 rounded-lg font-black text-xs  ' >
                                                                 {card.Name}
                                                             </div> 
                                                         ) : 
                                                         (
-                                                            <div style={{borderRadius:"10px",width:"130px",height:"25px",marginTop:"20px", fontWeight:"700",fontSize:"18px"}}>
+                                                            <div className='flex items-end row-start-2 row-span-2 rounded-lg font-black text-sm  '>
                                                                   {card.Name}
                                                             </div> 
                                                         )
@@ -288,9 +288,9 @@ export default function Feed (props) {
                                                      }
                                                         {
                                                             card.IsDownloadable &&
-                                                            <div className={styles.download} style={{borderRadius:"10px",display:"flex",alignItems:"center",justifyContent:"center",width:"40px",height:"40px"}}>
+                                                            <div className='row-start-2 row-span-2 flex items-center justify-center rounded-lg shadow-md py-2 hover:shadow-xl transition ease ' >
                                                                 <a href={`https://${card.image}.ipfs.dweb.link/image`} download target='_blank' rel="noreferrer" onClick={(e) =>download(card.image,card.Name)}>  
-                                                                <img src='./arrow.png' alt='' style={{width:"20px", height:"20px"}} />
+                                                                <img src='./arrow.png' alt='' className='h-5 w-5 mt-1' />
                                                                 </a>
                                                        
                                                              </div>
@@ -298,17 +298,16 @@ export default function Feed (props) {
                                                         
                                                     </div>
                                                     
-                                                    <div style={{borderRadius:"10px",width:"190px",height:"auto",marginTop:"13px",fontSize:"14px"}}>
+                                                    <div className='rounded-md mt-3 text-sm h-auto ' >
                                                         {card.Description} 
                                                     </div>
-                                                    <div className='d-flex justify-content-between'>
-                                                        <button className={styles.ToggleButton} onClick={() => StarMeme(card.Id, card.DidMemberStarMe)}
-                                                            style={{borderRadius:"5px",border:"1px black solid",width:"90px",height:"30px",marginTop:"13px",display:"flex",alignItems:"center", justifyContent:"space-around"}}>
+                                                    <div className='flex flex-row  justify-between'>
+                                                        <button className='rounded-md border-2 border-black flex mt-3  items-center justify-around h-8 w-24 hover:bg-[#FFFF00] 'onClick={() => StarMeme(card.Id, card.DidMemberStarMe)}>
+                                                            
                                                             {
                                                                 loadingStar ? 
                                                                 (
-                                                                    <button className={styles.ToggleButtonLoading} 
-                                                                        style={{borderRadius:"5px",border:"1px black solid",width:"90px",height:"30px",marginTop:"13px",display:"flex",alignItems:"center", justifyContent:"space-around"}}>
+                                                                    <button className='bg-[#FFFF00] rounded-md border-2 border-black flex mt-3  items-center justify-around h-8 w-24'>
                                                                         <h4>
                                                                         <FaSpinner icon="spinner" className={styles.spinner} />
                                                                         </h4>
@@ -319,27 +318,26 @@ export default function Feed (props) {
                                                                     DidIStarMeme ?
                                                                     (
                                                                         <>
-                                                                        <img src='./filledStar.png' alt='STAR'  style={{width:"20px",height:"20px"}}  />
+                                                                        <img src='./filledStar.png' alt='STAR'  className='w-5 h-5'  />
                                                                         {card.Stars}
                                                                         </>
                                                                     ) 
                                                                     :
                                                                     (
                                                                         <>
-                                                                        <img src='./strokeStar.png' alt='STAR' style={{width:"20px",height:"20px"}}  />
+                                                                        <img src='./strokeStar.png' alt='STAR' className='w-5 h-5'  />
                                                                         {card.Stars}
                                                                         </>
                                                                     )
                                                                 )
                                                             }
                                                         </button>
-                                                       <button className={styles.ToggleButton2}  onClick={() => LikeMeme(card.Id, card.DidMemberLikeMe)}
-                                                            style={{borderRadius:"5px",border:"1px black solid",width:"90px",height:"30px",marginTop:"13px",display:"flex",alignItems:"center", justifyContent:"space-around"}}>
+                                                       <button className='rounded-md border-2 border-black flex mt-3  items-center justify-around h-8 w-24 hover:bg-[#ff0000] '  onClick={() => LikeMeme(card.Id, card.DidMemberLikeMe)}
+                                                           >
                                                                 {
                                                                 loadingLike?
                                                                 (
-                                                                    <button className={styles.ToggleButton2Loading}  
-                                                                    style={{borderRadius:"5px",border:"1px black solid",width:"90px",height:"30px",marginTop:"13px",display:"flex",alignItems:"center", justifyContent:"space-around"}}>
+                                                                    <button className='rounded-md border-2 border-black flex mt-3  items-center justify-around h-8 w-24 bg-[#FFFF00] ' >
                                                                         <h4>
                                                                             <FaSpinner icon="spinner" className={styles.spinner} />
                                                                         </h4>
@@ -351,14 +349,14 @@ export default function Feed (props) {
                                                                         (
                                                                             
                                                                             <>
-                                                                                <img src='./filledLove.png' alt='STAR'  style={{width:"20px",height:"20px"}}  />
+                                                                                <img src='./filledLove.png' alt='STAR'  className='w-5 h-5'  />
                                                                                 {card.Likes}
                                                                             </>
                                                                         ) 
                                                                         :
                                                                         (
                                                                             <>
-                                                                                <img src='./UnfilledLove.png' alt='STAR' style={{width:"20px",height:"20px"}}  />
+                                                                                <img src='./UnfilledLove.png' alt='STAR' className='w-5 h-5'  />
                                                                                 {card.Likes}
                                                                             </>
                                                                         )
@@ -382,19 +380,19 @@ export default function Feed (props) {
 
         if(memes.length == 0) {
             return (
-                <div className='row d-flex align-items-center justify-content-center' style={{flexDirection:"row"}}>
+                <div className='flex flex-row items-center justify-center' >
 
                 
                     {
                         loadingpage ? 
                         ( 
-                            <div style={{fontSize:"100px", textAlign:"center"}}>
+                            <div className='text-center text-8xl'>
                                 <FaSpinner icon="spinner" className={styles.spinner} />
                             </div>
                         ) 
                         : 
                         (
-                            <h4 style={{textAlign:"center"}}>
+                            <h4 className='text-center'>
                                 There are no Memes For Display
                             </h4>
                         )
@@ -406,18 +404,19 @@ export default function Feed (props) {
     }
 
     return (
-        <div>
+        <div> 
             <Head>
                 <title>Home</title>
                 <meta name="description" content="By Oleanji" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <img src='./LogoForest.png'  style={{width:"283px", height:"107px", marginTop:"-20px"}}/>
-            <div>
-                <ConnectButton />
-            </div>
-            <div> 
-                {renderButton()}
+            <div className='flex flex-col space-y-6'>
+                <div className='flex flex-col items-end pt-3 px-2'>
+                    <ConnectButton />
+                </div>
+                <div className=''> 
+                    {renderButton()}
+                </div>
             </div>
         </div>
       )

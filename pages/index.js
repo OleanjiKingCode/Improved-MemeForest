@@ -98,7 +98,7 @@ const renderButton = () => {
                    ( lists.Adddress == Address )?
                    (
                     <div className='flex flex-col w-full items-center justify-between space-y-20'>
-                      <div className='shadow-sm w-full bg-red-300'>
+                      <div className='shadow-sm w-full bg-green-400'>
                         <div className='flex flex-col items-center w-full'>
                           <div className='border border-slate-400 flex flex-col md:flex-row items-center w-full'>
                             <div className="w-full basis-1/5 p-4">
@@ -107,12 +107,12 @@ const renderButton = () => {
                               </div>
                             </div>
                             <div className="flex flex-col justify-between w-full basis-4/5 space-y-6 p-10 mr-4 ">
-                              <div className=' flex items-start text-3xl w-3/6 font-semibold hover:cursor-pointer text-black border-b border-slate-900 '>
+                              <div className=' flex items-start text-3xl md:w-3/6 font-semibold hover:cursor-pointer  text-white border-b border-white'>
                                 <span className='pb-2'>
                                 {lists.Name}
                                 </span>
                               </div>
-                              <div className='flex justify-between  text-lg font-thin hover:cursor-pointer text-black  pt-10'>
+                              <div className='flex justify-between flex-col md:flex-row space-y-6 md:space-y-6 text-lg font-thin hover:cursor-pointer text-white  pt-2'>
                                 <div className='flex items-end text-lg font-medium '>
                                     {lists.Adddress}
                                 </div>
@@ -125,13 +125,13 @@ const renderButton = () => {
                           </div>
                         </div>
                       </div>
-                      <div className='flex flex-col items-center w-full'>
-                        <div className='flex justify-between space-x-6 hover:cursor-pointer'>
-                          <div className='flex flex-col items-center p-10 bg-red-300 hover:bg-gray-50 rounded-lg border border-black '>
+                      <div className='flex flex-col items-center w-full p-10'>
+                        <div className='flex flex-col md:flex-row justify-between space-y-6 md:space-x-6 md:space-y-0  hover:cursor-pointer'>
+                        <div className='flex flex-col  items-center p-10  text-orange-500 hover:bg-gray-50 rounded-lg border-2 border-green-400'>
                             <span className='font-medium '> Number Of Starred Memes</span>
                             <span className='font-normal'> {lists.StarredMemes}</span>
                           </div>
-                          <div className='flex flex-col  items-center p-10 bg-red-300 hover:bg-gray-50 rounded-lg border border-black'>
+                          <div className='flex flex-col  items-center p-10  text-orange-500 hover:bg-gray-50 rounded-lg border-2 border-green-400'>
                             <span className='font-medium'> Number Of Total Memes</span>
                             <span className='font-normal'> {lists.TotalMeme}</span>
                           </div>
@@ -190,8 +190,6 @@ const renderButton = () => {
         <meta name="description" content="By Oleanji" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div  className='h-24 w-full'> 
-      </div>
        {renderButton()}
     </div>
   )
