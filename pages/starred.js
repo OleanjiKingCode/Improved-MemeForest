@@ -3,26 +3,63 @@ import Web3Modal from "web3modal";
 import styles from '../styles/Home.module.css'
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useContract, useProvider,useSigner,useAccount,useBalance,useConnect  } from 'wagmi'
-import {MemeForestAddress} from '../constant'
+import {MemeForestAddress,Token, ApiUriv} from '../constant'
 import { useEffect, useRef, useState, useContext } from "react";
 import MEME from '../artifacts/contracts/MemeForest.sol/MemeForest.json'
 import 'bootstrap/dist/css/bootstrap.css'
 import axios from "axios"
 import { useRouter } from 'next/router';
-import { FaSpinner } from 'react-icons/fa';
-import PageLoader from 'next/dist/client/page-loader';
+import { Audio, TailSpin} from  'react-loader-spinner'
+
+    
+const MemesQuery= `
+query {
+    memes(
+    orderBy : Date ,
+    orderDirection: desc
+        ) 
+    {
+        id
+        MemeInfo
+        Owner
+        IsStarred
+        Stars
+        Likes
+        Date
+        FileType
+        IsDownloadable
+        StarredAddresses
+        LikesAddresses
+    }
+}
+`
+
+const MemberQuery= `
+query {
+  memebers{
+    Name
+    Adddress
+    TotalMeme
+    StarredMemes
+    Date
+  }
+}
+`
+
+const client = createClient({
+  url: ApiUriv,
+})    
     
     
-    
-    
-export default function Starred () {   
-    
+export default function Starred (props) {   
+    const Memeslength  = props.memes.length
+    const Memberslength  = props.members.length
     const { data} = useAccount()
     const person = data?.address;
     const [starredMemes,setStarredMemes] = useState([])
     const [AMember,setAMember] = useState(false)
     const[loading, setLoading] = useState(false)
-    const[memberDetails,setMemberDetails] = useState([])
+    const[memeDetails,setMemeDetails] = useState([])
     const[loadingpage,setLoadingPage] = useState(false)
     const provider = useProvider()
     const { data: signer} = useSigner()
@@ -83,64 +120,63 @@ export default function Starred () {
             setAMember(false)
         }
     }
+    function getAccessToken () {
+        return Token;
+    }
+    function makeStorageClient () {
+    return new Web3Storage({ token: getAccessToken() })
+    }
 
-    const fetchAllStarredMemes = async () => {
-        try {
-            
-            const data= await contractWithProvider.fetchMyStarredMemes(person);
-           
-            const tx = await Promise.all(data.map(async i => {
-              
-                let url = i.Memeinfo
-                
-               
-                
-                const StarAnswer= await contractWithProvider.WhatDidIStar(i.fileId,person);
-                const LikeAnswer= await contractWithProvider.WhatDidILike(i.fileId,person);
-               
-
-               
-               const Info = await axios.get(url)
-                
-               
-                let List = {
-                    
-                    Name:Info.data.nameOfFile,
-                    AddressOfOwner : i.Owner,
-                    Id :i.fileId.toNumber(),
-                    File: Info.data.image,
-                    IsStarred:i.starred,
-                    NumberOfStars:i.Stars.toNumber(),
-                    NumberOfLikes:i.Likes.toNumber(),
-                    Date:i.DateOfCreation,
-                    Description:Info.data.DescriptionOfFile,
-                    DidMemberStarMe: StarAnswer,
-                    DidMemberLikeMe:LikeAnswer
+    const StarredMemes = async (props) => {
+        const client = makeStorageClient()
+        let data = props.memes;
+        const tx = await Promise.all(data.map(async i => {
+            const res = await client.get(i.MemeInfo) 
+            if(!res.ok) {
+                return;
+            }
+            const LikesAddress = i.LikesAddresses;
+            const StarredAddress = i.StarredAddresses;
+            for (let i = 0; i < LikesAddress.length; i++) {
+                const Address = person.toLowerCase()
+                const CurrentAddress = LikesAddress[i]
+                if(Address == CurrentAddress ){
+                    SetDidILikeMeme(true)
                 }
-                return List
-            
-            }));
-            setStarredMemes(tx);
-            const ata= await contractWithProvider.fetchMembers();
-    
-            const txn = await Promise.all(ata.map(async i =>{
-               let list = {
-                Name : i.Name,
-                Address : i.MemeberAddress,
-                Date: i.Datejoined,
-                Memes : i.MyMemes.toNumber(),
-                Starred :i.MyStarredMemes.toNumber()
-               
-              }
-              return list
-             }));
-             setMemberDetails(txn)
-        } catch (error) {
-            console.log(error)
-        }
-       
-            
-        
+                else{
+                    SetDidILikeMeme(false)
+                }
+                
+            }
+            for (let i = 0; i < StarredAddress.length; i++) {
+                const Address = person.toLowerCase()
+                const CurrentAddress = StarredAddress[i]
+                if(Address == CurrentAddress ){
+                    SetDidIStarMeme(true)
+                }
+                else{
+                    SetDidIStarMeme(false)
+                }
+                
+            }
+            let files = await res.files()
+            const info =  await axios.get(`https://${files[0].cid}.ipfs.dweb.link`)
+            let List = {
+                Name:info.data.nameOfFile,
+                Description:info.data.DescriptionOfFile,
+                image:info.data.image,
+                Owner: i.Owner,
+                IsStarred:i.IsStarred,
+                NumberOfStars:i.Stars,
+                NumberOfLikes:i.Likes,
+                Date:i.Date,
+                Id :i.id,
+                IsDownloadable : i.IsDownloadable,
+                FileType :i.FileType
+            }
+            return List
+        })); 
+        setMemeDetails(tx)
     }
 
     
@@ -165,7 +201,7 @@ export default function Starred () {
             setLoading(false)
         } catch (e) {
             console.log(e)
-        }
+        } 
     }
 
     const download = (e,name) => {
@@ -229,7 +265,7 @@ export default function Starred () {
                     loadingpage ? 
                     ( 
                         <div style={{fontSize:"100px", textAlign:"center"}}>
-                            <FaSpinner icon="spinner" className={styles.spinner} />
+                             <TailSpin color="#00BFFF" height={80} width={80} />
                         </div>
                     ) 
                     : 
@@ -410,3 +446,22 @@ export default function Starred () {
     </div>
     )
 }
+
+async function GetData() {
+    const data = await client.query(MemesQuery).toPromise()
+    return (data.data.memes)
+  }
+  async function MemInfo() {
+    const info = await client.query(MemberQuery).toPromise()
+    return (info.data.memebers)
+  }
+  export async function getServerSideProps() {
+    const data = await GetData()
+    const info = await MemInfo()
+    return{
+      props:{
+        memes:data,
+        members:info
+      }
+    }
+  }

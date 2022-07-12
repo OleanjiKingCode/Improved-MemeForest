@@ -10,7 +10,7 @@ import axios from "axios"
 import { FaSpinner } from 'react-icons/fa';
 import { createClient } from 'urql'
 import { Web3Storage } from 'web3.storage'
-
+import { Audio, TailSpin} from  'react-loader-spinner'
 
 
 const MemesQuery= `
@@ -71,15 +71,7 @@ export default function Feed (props) {
         contractInterface: MEME.abi,
         signerOrProvider: signer,
     })
-
-    const contractWithProvider = useContract({
-        addressOrName: MemeForestAddress,
-        contractInterface: MEME.abi,
-        signerOrProvider: provider,
-    })
     useEffect(() => {
-        
-           
             PageLoad();
             FechMemeInfo(props)
     }, []);
@@ -100,17 +92,14 @@ export default function Feed (props) {
             setLoadingStar(true)
           
             if (bool == true) {
-               
                 const data= await contractWithSigner.RemoveStarMeme(id)
                 await data.wait()
                 await fetchAllMemes();
-               
             }
             else {
                 const data= await contractWithSigner.StarMeme(id)
                 await data.wait()
                 await fetchAllMemes();
-                
             }
             setLoadingStar(false)
 
@@ -201,21 +190,21 @@ export default function Feed (props) {
                 
             }
             let files = await res.files()
-                const info =  await axios.get(`https://${files[0].cid}.ipfs.dweb.link`)
-                let List = {
-                    Name:info.data.nameOfFile,
-                    Description:info.data.DescriptionOfFile,
-                    image:info.data.image,
-                    Owner: i.Owner,
-                    IsStarred:i.IsStarred,
-                    NumberOfStars:i.Stars,
-                    NumberOfLikes:i.Likes,
-                    Date:i.Date,
-                    Id :i.id,
-                    IsDownloadable : i.IsDownloadable,
-                    FileType :i.FileType
-                }
-                return List
+            const info =  await axios.get(`https://${files[0].cid}.ipfs.dweb.link`)
+            let List = {
+                Name:info.data.nameOfFile,
+                Description:info.data.DescriptionOfFile,
+                image:info.data.image,
+                Owner: i.Owner,
+                IsStarred:i.IsStarred,
+                NumberOfStars:i.Stars,
+                NumberOfLikes:i.Likes,
+                Date:i.Date,
+                Id :i.id,
+                IsDownloadable : i.IsDownloadable,
+                FileType :i.FileType
+            }
+            return List
         })); 
         setMemberDetails(tx)
     }
@@ -387,7 +376,7 @@ export default function Feed (props) {
                         loadingpage ? 
                         ( 
                             <div className='text-center text-8xl'>
-                                <FaSpinner icon="spinner" className={styles.spinner} />
+                               <TailSpin color="#00BFFF" height={80} width={80} />
                             </div>
                         ) 
                         : 

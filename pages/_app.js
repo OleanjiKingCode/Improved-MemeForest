@@ -10,7 +10,7 @@ import {
 import 'bootstrap/dist/css/bootstrap.css'
 import { chain, createClient, WagmiProvider } from 'wagmi';
 import Navbar from '../components/Navbar';
-
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 const { chains, provider } = configureChains(
   [chain.mainnet, chain.polygon, chain.polygonMumbai],
