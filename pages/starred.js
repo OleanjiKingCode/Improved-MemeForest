@@ -393,26 +393,20 @@ export default function Starred () {
 
 
     return (
-        <div className={styles.container}>
-          <Head>
+        <div> 
+        <Head>
             <title>Home</title>
-            <meta name="description" content="By Oleanji"/>
+            <meta name="description" content="By Oleanji" />
             <link rel="icon" href="/favicon.ico" />
-          </Head>
-        <div className={styles.topper} >
-        <img src='./LogoForest.png'  style={{width:"283px", height:"107px", marginTop:"-20px"}}/>
-          <div className={styles.connect}>
-            <ConnectButton />
-          </div>
+        </Head>
+        <div className='flex flex-col space-y-6'>
+            <div className='flex flex-col items-end pt-3 px-2'>
+                <ConnectButton />
+            </div>
+            <div> 
+                {renderButton()}
+            </div>
         </div>
-        <div style={{padding:"120px 20px 20px 20px"}}> 
-       
-          {renderButton()}
-        
-
-      </div>
-    
-          
-        </div>
+    </div>
     )
 }

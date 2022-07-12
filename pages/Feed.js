@@ -319,14 +319,14 @@ export default function Feed (props) {
                                                                     (
                                                                         <>
                                                                         <img src='./filledStar.png' alt='STAR'  className='w-5 h-5'  />
-                                                                        {card.Stars}
+                                                                        {card.NumberOfStars}
                                                                         </>
                                                                     ) 
                                                                     :
                                                                     (
                                                                         <>
                                                                         <img src='./strokeStar.png' alt='STAR' className='w-5 h-5'  />
-                                                                        {card.Stars}
+                                                                        {card.NumberOfStars}
                                                                         </>
                                                                     )
                                                                 )
@@ -350,14 +350,14 @@ export default function Feed (props) {
                                                                             
                                                                             <>
                                                                                 <img src='./filledLove.png' alt='STAR'  className='w-5 h-5'  />
-                                                                                {card.Likes}
+                                                                                {card.NumberOfLikes}
                                                                             </>
                                                                         ) 
                                                                         :
                                                                         (
                                                                             <>
                                                                                 <img src='./UnfilledLove.png' alt='STAR' className='w-5 h-5'  />
-                                                                                {card.Likes}
+                                                                                {card.NumberOfLikes}
                                                                             </>
                                                                         )
                                                                 )
