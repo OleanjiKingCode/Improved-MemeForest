@@ -328,7 +328,7 @@ export default function Feed (props) {
                                                                 (
                                                                     <button className='rounded-md border-2 border-black flex mt-3  items-center justify-around h-8 w-24 bg-[#FFFF00] ' >
                                                                         <h4>
-                                                                            <FaSpinner icon="spinner" className={styles.spinner} />
+                                                                        <TailSpin color="#00BFFF" height={10} width={10} />
                                                                         </h4>
                                                                     </button>
                                                                 ) 

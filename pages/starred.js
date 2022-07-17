@@ -56,6 +56,8 @@ export default function Starred (props) {
     const Memberslength  = props.members.length
     const { data} = useAccount()
     const person = data?.address;
+    const[DidIStarMeme, SetDidIStarMeme] =useState(false)
+    const[DidILikeMeme, SetDidILikeMeme] =useState(false)
     const [starredMemes,setStarredMemes] = useState([])
     const [AMember,setAMember] = useState(false)
     const[loading, setLoading] = useState(false)
@@ -78,16 +80,12 @@ export default function Starred (props) {
 
     useEffect(() => {
         PageLoad();
-        setInterval(async () => {
-            
-        }, 5 * 1000);
-        fetchAllStarredMemes();
+        StarredMemes();
 }, []);
     useEffect(() => {
        
         if(!AMember){
             checkIfAMember();
-            
         }
     }, [AMember]);
    
@@ -101,20 +99,22 @@ export default function Starred (props) {
             console.log(e)
         }
     }
-    const checkIfAMember = async () => {
+    const checkIfAMember = async (props) => {
         try {
             
-            const tx= await contractWithProvider.IsAMember(person)
-            
-           
-            if(tx) {
-            
-            setAMember(true)
-            }
-            else{
-            setAMember(false)
-            }
-           
+            let data = props.members;
+            const tx = await Promise.all(data.map(async i => {
+                const member = i.Adddress;
+                const Address = person.toLowerCase()
+                if(Address == member) {
+                    setAMember(true)
+                }
+                else{
+                    setAMember(false)
+                }
+                return AMember
+            }));
+            console.log(tx)
         } catch (e) {
             console.log(e)
             setAMember(false)
@@ -182,27 +182,25 @@ export default function Starred (props) {
     
     const StarMeme = async (id,bool) =>{
         try {
-            setLoading(true)
-           
+            setLoadingStar(true)
+          
             if (bool == true) {
-                // unstarring
                 const data= await contractWithSigner.RemoveStarMeme(id)
                 await data.wait()
-                await fetchAllStarredMemes();
-                // setStarToggler(false)
+                await fetchAllMemes();
             }
             else {
                 const data= await contractWithSigner.StarMeme(id)
                 await data.wait()
-                await fetchAllStarredMemes();
-                // setStarToggler(true)
+                await fetchAllMemes();
             }
-            
-            setLoading(false)
+            setLoadingStar(false)
+
         } catch (e) {
             console.log(e)
-        } 
+        }
     }
+    
 
     const download = (e,name) => {
         
@@ -236,18 +234,17 @@ export default function Starred (props) {
                     {
                     loadingpage ? 
                     ( 
-                        <div style={{fontSize:"100px", textAlign:"center"}}>
-                            <FaSpinner icon="spinner" className={styles.spinner} />
+                        <div className='flex flex-row items-center justify-center  '>
+                            <TailSpin color="#00BFFF" height={80} width={80} />
                         </div>
                     ) 
                     : 
                     (
-                        <div style={{ padding:"20px", textAlign:"center",margin:"5px 0 5px 0",height:"80vh",top:"50%", left:"50%", display:"flex", alignItems:"center",justifyContent:"center" ,flexDirection:"column" }}> 
-                            <div style={{fontSize:"18px"}}>
+                        <div className='flex flex-row items-center justify-center '> 
+                            <div className='text-center font-bold text-lg '>
                                 Go Back Home and Register before Seeing Starred Memes 
                             </div>
-                            <button onClick={gohome} style={{padding:"10px 15px", marginLeft:"10px",color:"black",marginTop:"10px",
-                            backgroundColor:"greenyellow",fontSize:"14px",borderRadius:"10px"}}> 
+                            <button onClick={gohome} className='no-underline bg-green-500 py-2 px-3 rounded-lg font-bold text-teal-50 hover:bg-orange-500 cursor-pointer ' > 
                                 Home
                             </button>
                         </div>
@@ -257,25 +254,24 @@ export default function Starred (props) {
             )
         }
         if(AMember) {
-           if(starredMemes.length == 0) 
+           if(memeDetails.length == 0) 
            {
             return (
                 <div>
                     {
                     loadingpage ? 
                     ( 
-                        <div style={{fontSize:"100px", textAlign:"center"}}>
-                             <TailSpin color="#00BFFF" height={80} width={80} />
+                        <div className='flex flex-row items-center justify-center  '>
+                            <TailSpin color="#00BFFF" height={80} width={80} />
                         </div>
                     ) 
                     : 
                     (
-                        <div style={{ padding:"20px", textAlign:"center",margin:"5px 0 5px 0",height:"80vh",top:"50%", left:"50%", display:"flex", alignItems:"center",justifyContent:"center" ,flexDirection:"column"  }}> 
-                            <div style={{fontSize:"18px"}}>
+                        <div className='flex flex-row items-center justify-center ' > 
+                            <div className='text-center font-bold text-lg '>
                                 You have No Starred Memes Go back to Create Memes 
                             </div>
-                            <button onClick={create} style={{padding:"10px 15px", marginLeft:"10px",color:"black",marginTop:"10px",
-                            backgroundColor:"greenyellow",fontSize:"14px",borderRadius:"10px", border:"none"}}> 
+                            <button onClick={create} className='no-underline bg-green-500 py-2 px-3 rounded-lg font-bold text-teal-50 hover:bg-orange-500 cursor-pointer '> 
                                 Create Meme
                             </button>
                         </div>
@@ -284,134 +280,130 @@ export default function Starred (props) {
                 </div>
             )
            }
-           if(starredMemes.length > 0){
+           if(memeDetails.length > 0){
             return(
-                <div >
-                <h3 style={{textAlign:"center"}}>
+                <div className='flex flex-row items-center' >
+                <h3 className='text-center font-bold text-lg'>
                     YOUR STARRED MEMES
                 </h3>
               
-                <div className='row d-flex' style={{flexDirection:"row"}}>
+                <div className='grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-4 px-5 py-2 ' >
                     {
-                        starredMemes.map((card,i) => {
+                        memeDetails.map((card,i) => {
                             return(  
-                                <div key={i} className='col-md-3 p-3'>   
+                                <div key={i} cclassName='w-full shadow-md p-3 rounded-3xl bg-gray-50 '>   
                                     {
-                                        (!card.Name == " " && !card.Description == " " && card.NumberOfStars >= 1) &&
+                                        DidIStarMeme &&
 
-                                            <div className={styles.Memebox} style={{borderRadius:"25px", height:"auto",padding:"10px"}}>
-                                                <div className={styles.upperimg}  style={{borderRadius:"15px",height:"150px",overflow:"hidden" ,flexDirection:"column"}}>
-                                                <a href={card.File} target='_blank' rel="noreferrer" style={{padding:"0", margin:"0", textDecoration:"none", }}>  
-                                                    <img src={card.File} className={styles.change} alt="..." style={{height:"150px",width:"auto",}}/>
-                                                </a>
-                                                <div className={styles.nameOfOwner} >
-                                                        {
-                                                            memberDetails.map((lists,i) => {
-                                                                
-                                                                return(
-                                                                    
-                                                                    <div key={i}  style={{fontSize:"14px",fontWeight:"500"}}>
-                                                                    {
-                                                                        lists.Address == card.AddressOfOwner &&
-                                                                        <div>
-                                                                            {lists.Name}
-                                                                        </div>
-                                                                    }
-                                                                    </div>
-                                                                )
-                                                            })
-                                                        
-                                                        }
-                                                    </div>
-                                                    <div className={styles.dateOfMeme} >
-                                                        {
-                                                            card.Date
-                                                        
-                                                        }
-                                                    </div>
-                                               </div>
-                                                <div className='py-2 px-3' style={{borderRadius:"25px",border:"1px black solid",height:"auto",marginTop:"10px"}}>
-                                                    <div className='d-flex justify-content-between ' >
-                                                    {
-                                                                card.Name.length > 7 ?
-                                                                (
-                                                                    <div style={{borderRadius:"10px",width:"130px",height:"25px",marginTop:"20px", fontWeight:"900",fontSize:"12px"}}>
-                                                                        {card.Name}
-                                                                    </div> 
-                                                                ) : 
-                                                                (
-                                                                    <div style={{borderRadius:"10px",width:"130px",height:"25px",marginTop:"20px", fontWeight:"700",fontSize:"18px"}}>
-                                                                        {card.Name}
-                                                                    </div> 
-                                                                )
-                                                            }
-                                                        <div className={styles.download} style={{borderRadius:"10px",display:"flex",alignItems:"center",justifyContent:"center",width:"40px",height:"40px"}}>
-                                                        <a href={card.File} download target='_blank' rel="noreferrer"  onClick={(e) =>download(card.File,card.Name)}>  
-                                                        <img src='./arrow.png' alt='' style={{width:"20px", height:"20px"}} />
-                                                        </a>
-                                                       
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    <div style={{borderRadius:"10px",width:"190px",height:"auto",marginTop:"13px",fontSize:"14px"}}>
-                                                        {card.Description} 
-                                                    </div>
-                                                    <div className='' >
-                                                    {
-                                                        loading ?
-                                                        (
-                                                            <button className={styles.ToggleButtonLoading} 
-                                                         style={{borderRadius:"5px",border:"1px black solid",width:"100%",height:"30px",marginTop:"13px",display:"flex",alignItems:"center", justifyContent:"space-around"}}>
-                                                            <h4>
-                                                            <FaSpinner icon="spinner" className={styles.spinner} />
-                                                            </h4>
-                                                            </button>
-                                                        )
-                                                        :
-                                                        (
-                                                            <button className={styles.ToggleButton} onClick={() => StarMeme(card.Id, card.DidMemberStarMe)}
-                                                         style={{borderRadius:"5px",border:"1px black solid",width:"100%",height:"30px",marginTop:"13px",display:"flex",alignItems:"center", justifyContent:"space-around"}}>
-                                                            { 
-                                                            // This was complicated for me when getting the logic lol
-                                                            // so whatrs happening here is we wanna know 3 things: 
-                                                            // Did I star this Meme?
-                                                            // What Did I Star?
-                                                            // Who starred this Meme?
-                                                            // so i asnwer these questions by checking if the cuurent user has starred this meme
-                                                            /*
-                                                                so i check using the id whether this person starred it already them if so show that 
-                                                                it has been starred then if not check if i clicked the button 
-                                                                if i did then show starred star 
-                                                                if i have never starred this item before and i didnt click the button then show empty star
-
-                                                            */
-                                                             (card.DidMemberStarMe == true) ?
-                                                                (
-                                                                    <>
-                                                                    <img src='./filledStar.png' alt='STAR'  style={{width:"20px",height:"20px"}}  />
-                                                                    {card.NumberOfStars}
-                                                                    </>
-                                                                ) 
-                                                                :
-                                                                (
-                                                                   
-                                                                    <>
-                                                                            <img src='./strokeStar.png' alt='STAR' style={{width:"20px",height:"20px"}}  />
-                                                                            {card.NumberOfStars}
-                                                                    </>
-                                                                )
-                                                            }
+                                        <div className='flex flex-col' >
+                                        <div className='group flex flex-row items-center justify-center overflow-hidden rounded-lg '  >
+                                            <a href={card.File} target='_blank' rel="noreferrer" >  
+                                               {
+                                                   (card.FileType == "img/png") ?
+                                                   (
+                                                    <img src={`https://${card.image}.ipfs.dweb.link/image`}  className='w-full rounded-lg h-36 group-hover:scale-150 transition ease duration-300' alt="..." />
+                                                   )
+                                                   :
+                                                   (
+                                                    <video src={`https://${card.image}.ipfs.dweb.link/image`}  className='w-full rounded-lg h-36 group-hover:scale-150 transition ease duration-300' alt="..."  width="500px" height="500px"  controls="controls"/> 
+                                                   )
+                                               } 
+                                               
+                                            </a>
+                                            <div className=' hidden p-1 rounded-lg bg-gray-700 text-gray-100 font-medium text-xs group-hover:inline absolute self-start  ' >
+                                                {
+                                                    props.members.map((lists,i) => {
+                                                        return(
                                                             
-                                                         </button>
-                                                       
+                                                            <div key={i}  >
+                                                            {
+                                                                lists.Adddress == card.Owner &&
+                                                                <div>
+                                                                    {lists.Name}
+                                                                </div>
+                                                            }
+                                                            </div>
+                                                        )
+                                                    })
+                                                
+                                                }
+                                            </div>
+                                            <div className='hidden p-1 rounded-lg bg-gray-700 text-gray-100 font-thin text-xs group-hover:inline absolute self-end'  >
+                                                {
+                                                    card.Date
+                                                
+                                                }
+                                            </div>
+                                       </div>
+                                        <div className='py-2 px-3 border-2 border-gray-500 h-auto mx-2 mt-4 rounded-lg' >
+                                            <div className='grid grid-rows grid-flow-col gap-1  ' >
+                                                
+                                            {
+                                                    card.Name.length > 7 ?
+                                                (
+                                                    <div className='flex items-end row-start-2 row-span-2 rounded-lg font-black text-xs  ' >
+                                                        {card.Name}
+                                                    </div> 
+                                                ) : 
+                                                (
+                                                    <div className='flex items-end row-start-2 row-span-2 rounded-lg font-black text-sm  '>
+                                                          {card.Name}
+                                                    </div> 
+                                                )
+
+                                             }
+                                                {
+                                                    card.IsDownloadable &&
+                                                    <div className='row-start-2 row-span-2 flex items-center justify-center rounded-lg shadow-md py-2 hover:shadow-xl transition ease ' >
+                                                        <a href={`https://${card.image}.ipfs.dweb.link/image`} download target='_blank' rel="noreferrer" onClick={(e) =>download(card.image,card.Name)}>  
+                                                        <img src='./arrow.png' alt='' className='h-5 w-5 mt-1' />
+                                                        </a>
+                                               
+                                                     </div>
+                                                }
+                                                
+                                            </div>
+                                            
+                                            <div className='rounded-md mt-3 text-sm h-auto ' >
+                                                {card.Description} 
+                                            </div>
+                                            <div className='flex flex-row  justify-between'>
+                                                <button className='rounded-md border-2 border-black flex mt-3  items-center justify-around h-8 w-24 hover:bg-[#FFFF00] 'onClick={() => StarMeme(card.Id, card.DidMemberStarMe)}>
+                                                    
+                                                    {
+                                                        loadingStar ? 
+                                                        (
+                                                            <button className='bg-[#FFFF00] rounded-md border-2 border-black flex mt-3  items-center justify-around h-8 w-24'>
+                                                                <h4>
+                                                                <FaSpinner icon="spinner" className={styles.spinner} />
+                                                                </h4>
+                                                            </button>
+                                                        ) 
+                                                        : 
+                                                        (
+                                                            DidIStarMeme ?
+                                                            (
+                                                                <>
+                                                                <img src='./filledStar.png' alt='STAR'  className='w-5 h-5'  />
+                                                                {card.NumberOfStars}
+                                                                </>
+                                                            ) 
+                                                            :
+                                                            (
+                                                                <>
+                                                                <img src='./strokeStar.png' alt='STAR' className='w-5 h-5'  />
+                                                                {card.NumberOfStars}
+                                                                </>
+                                                            )
                                                         )
                                                     }
-                                                         
-                                                        
-                                                    </div>
-                                                    
-                                                </div>
+                                                </button>
+                                               
+                                                
                                             </div>
+                                            
+                                        </div>
+                                    </div>
                                        
                                     }
                                 </div>
