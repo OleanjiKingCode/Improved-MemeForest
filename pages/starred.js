@@ -1,6 +1,5 @@
 import Head from 'next/head'
 import Web3Modal from "web3modal";
-import styles from '../styles/Home.module.css'
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useContract, useProvider,useSigner,useAccount,useBalance,useConnect  } from 'wagmi'
 import {MemeForestAddress,Token, ApiUriv} from '../constant'
@@ -8,6 +7,8 @@ import { useEffect, useRef, useState, useContext } from "react";
 import MEME from '../artifacts/contracts/MemeForest.sol/MemeForest.json'
 import 'bootstrap/dist/css/bootstrap.css'
 import axios from "axios"
+import { createClient } from 'urql'
+import { Web3Storage } from 'web3.storage'
 import { useRouter } from 'next/router';
 import { Audio, TailSpin} from  'react-loader-spinner'
 
@@ -56,6 +57,9 @@ export default function Starred (props) {
     const Memberslength  = props.members.length
     const { data} = useAccount()
     const person = data?.address;
+    const[loadingStarId, setLoadingStarId] = useState(0)
+    const [memes,setMemes] = useState([])
+    const[loadingStar, setLoadingStar] = useState(false)
     const[DidIStarMeme, SetDidIStarMeme] =useState(false)
     const[DidILikeMeme, SetDidILikeMeme] =useState(false)
     const [starredMemes,setStarredMemes] = useState([])
@@ -80,12 +84,12 @@ export default function Starred (props) {
 
     useEffect(() => {
         PageLoad();
-        StarredMemes();
+        StarredMemes(props);
 }, []);
     useEffect(() => {
        
         if(!AMember){
-            checkIfAMember();
+            checkIfAMember(props);
         }
     }, [AMember]);
    
@@ -135,19 +139,8 @@ export default function Starred (props) {
             if(!res.ok) {
                 return;
             }
-            const LikesAddress = i.LikesAddresses;
             const StarredAddress = i.StarredAddresses;
-            for (let i = 0; i < LikesAddress.length; i++) {
-                const Address = person.toLowerCase()
-                const CurrentAddress = LikesAddress[i]
-                if(Address == CurrentAddress ){
-                    SetDidILikeMeme(true)
-                }
-                else{
-                    SetDidILikeMeme(false)
-                }
-                
-            }
+         
             for (let i = 0; i < StarredAddress.length; i++) {
                 const Address = person.toLowerCase()
                 const CurrentAddress = StarredAddress[i]
@@ -159,6 +152,7 @@ export default function Starred (props) {
                 }
                 
             }
+            const StarAnswer= await contractWithProvider.WhatDidIStar(i.id,person);
             let files = await res.files()
             const info =  await axios.get(`https://${files[0].cid}.ipfs.dweb.link`)
             let List = {
@@ -172,7 +166,8 @@ export default function Starred (props) {
                 Date:i.Date,
                 Id :i.id,
                 IsDownloadable : i.IsDownloadable,
-                FileType :i.FileType
+                FileType :i.FileType,
+                DidMemberStarMe: StarAnswer,
             }
             return List
         })); 
@@ -183,16 +178,16 @@ export default function Starred (props) {
     const StarMeme = async (id,bool) =>{
         try {
             setLoadingStar(true)
-          
+            setLoadingStarId(id)
             if (bool == true) {
                 const data= await contractWithSigner.RemoveStarMeme(id)
                 await data.wait()
-                await fetchAllMemes();
+                await FechMemeInfo(props);
             }
             else {
                 const data= await contractWithSigner.StarMeme(id)
                 await data.wait()
-                await fetchAllMemes();
+                await FechMemeInfo(props);
             }
             setLoadingStar(false)
 
@@ -234,13 +229,13 @@ export default function Starred (props) {
                     {
                     loadingpage ? 
                     ( 
-                        <div className='flex flex-row items-center justify-center  '>
-                            <TailSpin color="#00BFFF" height={80} width={80} />
+                        <div className='flex flex-row items-center justify-center text-8xl '>
+                           <img src="/loading.png" alt="loading..." />
                         </div>
                     ) 
                     : 
                     (
-                        <div className='flex flex-row items-center justify-center '> 
+                        <div className='flex flex-col items-center justify-center '> 
                             <div className='text-center font-bold text-lg '>
                                 Go Back Home and Register before Seeing Starred Memes 
                             </div>
@@ -261,8 +256,8 @@ export default function Starred (props) {
                     {
                     loadingpage ? 
                     ( 
-                        <div className='flex flex-row items-center justify-center  '>
-                            <TailSpin color="#00BFFF" height={80} width={80} />
+                        <div className='flex flex-row items-center justify-center text-8xl '>
+                             <img src="/loading.png" alt="loading..." />
                         </div>
                     ) 
                     : 
@@ -282,8 +277,8 @@ export default function Starred (props) {
            }
            if(memeDetails.length > 0){
             return(
-                <div className='flex flex-row items-center' >
-                <h3 className='text-center font-bold text-lg'>
+                <div className='flex flex-col ' >
+                <h3 className='text-center font-bold text-lg self-center'>
                     YOUR STARRED MEMES
                 </h3>
               
@@ -291,9 +286,12 @@ export default function Starred (props) {
                     {
                         memeDetails.map((card,i) => {
                             return(  
-                                <div key={i} cclassName='w-full shadow-md p-3 rounded-3xl bg-gray-50 '>   
-                                    {
-                                        DidIStarMeme &&
+                                <>
+                                 {
+                                        (card.DidMemberStarMe == true)  &&
+                                
+                                <div key={i} className='w-full shadow-md p-3 rounded-3xl bg-gray-50 '>   
+                                   
 
                                         <div className='flex flex-col' >
                                         <div className='group flex flex-row items-center justify-center overflow-hidden rounded-lg '  >
@@ -367,21 +365,21 @@ export default function Starred (props) {
                                             <div className='rounded-md mt-3 text-sm h-auto ' >
                                                 {card.Description} 
                                             </div>
-                                            <div className='flex flex-row  justify-between'>
-                                                <button className='rounded-md border-2 border-black flex mt-3  items-center justify-around h-8 w-24 hover:bg-[#FFFF00] 'onClick={() => StarMeme(card.Id, card.DidMemberStarMe)}>
+                                            <div className=''>
+                                                <button className='rounded-md border-2 border-black flex mt-3  items-center justify-around h-8 w-full hover:bg-[#FFFF00] 'onClick={() => StarMeme(card.Id, card.DidMemberStarMe)}>
                                                     
                                                     {
-                                                        loadingStar ? 
+                                                        ((loadingStarId == card.Id) && loadingStar ) ? 
                                                         (
-                                                            <button className='bg-[#FFFF00] rounded-md border-2 border-black flex mt-3  items-center justify-around h-8 w-24'>
+                                                            <button className='bg-[#FFFF00] rounded-md flex  items-center justify-around h-7 w-full'>
                                                                 <h4>
-                                                                <FaSpinner icon="spinner" className={styles.spinner} />
+                                                                <img src="/loader.png" alt="loading..." className='w-8 h-8 mt-2' />
                                                                 </h4>
                                                             </button>
                                                         ) 
                                                         : 
                                                         (
-                                                            DidIStarMeme ?
+                                                            (card.DidMemberStarMe == true) ?
                                                             (
                                                                 <>
                                                                 <img src='./filledStar.png' alt='STAR'  className='w-5 h-5'  />
@@ -404,9 +402,10 @@ export default function Starred (props) {
                                             
                                         </div>
                                     </div>
-                                       
+                                    </div> 
                                     }
-                                </div>
+                                
+                                </>
                             )
                         })
                     }

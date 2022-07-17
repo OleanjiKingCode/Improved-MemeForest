@@ -107,10 +107,13 @@ const renderButton = () => {
                               </div>
                             </div>
                             <div className="flex flex-col justify-between w-full basis-4/5 space-y-6 p-10 mr-4 ">
-                              <div className=' flex items-start text-3xl md:w-3/6 font-semibold hover:cursor-pointer  text-white border-b border-white'>
-                                <span className='pb-2'>
+                              <div className=' flex items-center justify-between   font-semibold hover:cursor-pointer '>
+                                <span className='pb-2 pr-5 text-3xl  text-white border-b border-white'>
                                 {lists.Name}
                                 </span>
+                                <div className='text-sm'>
+                                <ConnectButton />
+                                </div>
                               </div>
                               <div className='flex justify-between flex-col md:flex-row space-y-6 md:space-y-6 text-lg font-thin hover:cursor-pointer text-white  pt-2'>
                                 <div className='flex items-end text-lg font-medium '>

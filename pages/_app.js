@@ -11,6 +11,10 @@ import 'bootstrap/dist/css/bootstrap.css'
 import { chain, createClient, WagmiProvider } from 'wagmi';
 import Navbar from '../components/Navbar';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import { useState } from 'react';
+import Router from 'next/router';
+import Loader from '../components/loader';
+
 
 const { chains, provider } = configureChains(
   [chain.mainnet, chain.polygon, chain.polygonMumbai],
@@ -30,17 +34,39 @@ const wagmiClient = createClient({
 })
 
 function MyApp({ Component, pageProps }) {
+  const[loader,setLoader]= useState(false)
+  Router.events.on("routeChangeStart" , (url) => {
+    setLoader(true)
+  })
+
+  Router.events.on("routeChangeComplete" , (url) => {
+    setLoader(false)
+  })
+
   return(
     <div >
      
       <WagmiProvider client={wagmiClient}>
       <RainbowKitProvider chains={chains}>
       <div className=''>
-        <Navbar/>
-        <div  className='h-24 w-full'>
-        </div>
+      {
+      loader ?
+      (
+        <Loader/>
+      ) 
+      :
+      ( 
+        <>
+          <Navbar/>
+          <div  className='h-24 w-full'>
+          </div>
           <Component {...pageProps} /> 
-        </div>
+        </>
+       
+      )
+       
+      }
+       </div>
       </RainbowKitProvider>
     </WagmiProvider>
     </div>

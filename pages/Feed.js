@@ -1,5 +1,4 @@
 import Head from 'next/head'
-import styles from '../styles/Home.module.css'
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useContract, useProvider,useSigner,useAccount,useBalance,useConnect  } from 'wagmi'
 import {MemeForestAddress,Token, ApiUriv} from '../constant'
@@ -11,6 +10,7 @@ import { FaSpinner } from 'react-icons/fa';
 import { createClient } from 'urql'
 import { Web3Storage } from 'web3.storage'
 import { Audio, TailSpin} from  'react-loader-spinner'
+
 
 
 const MemesQuery= `
@@ -61,8 +61,8 @@ export default function Feed (props) {
     const[loadingStar, setLoadingStar] = useState(false)
     const[memberDetails,setMemberDetails] = useState([])
     const[loadingLike, setLoadingLike] = useState(false)
-    const[DidIStarMeme, SetDidIStarMeme] =useState(false)
-    const[DidILikeMeme, SetDidILikeMeme] =useState(false)
+    const[loadingLikeId, setLoadingLikeId] = useState(0)
+    const[loadingStarId, setLoadingStarId] = useState(0)
     const provider = useProvider()
     const { data: signer} = useSigner()
     const[loadingpage,setLoadingPage] = useState(false)
@@ -71,9 +71,14 @@ export default function Feed (props) {
         contractInterface: MEME.abi,
         signerOrProvider: signer,
     })
+    const contractWithProvider = useContract({
+        addressOrName: MemeForestAddress,
+        contractInterface: MEME.abi,
+        signerOrProvider: provider,
+    })
     useEffect(() => {
             PageLoad();
-            FechMemeInfo(props)
+            FechMemeInfo(props);
     }, []);
 
     const PageLoad = async () =>{
@@ -90,16 +95,17 @@ export default function Feed (props) {
     const StarMeme = async (id,bool) =>{
         try {
             setLoadingStar(true)
-          
+            setLoadingStarId(id)
             if (bool == true) {
                 const data= await contractWithSigner.RemoveStarMeme(id)
                 await data.wait()
-                await fetchAllMemes();
+                await FechMemeInfo(props);
             }
             else {
+                
                 const data= await contractWithSigner.StarMeme(id)
                 await data.wait()
-                await fetchAllMemes();
+                await FechMemeInfo(props);
             }
             setLoadingStar(false)
 
@@ -130,17 +136,18 @@ export default function Feed (props) {
     const LikeMeme = async (id,bool) =>{
         try {
             setLoadingLike(true)
+            setLoadingLikeId(id)
             if (bool == true) {
                
                 const data= await contractWithSigner.UnLikeMeme(id)
                 await data.wait()
-                await fetchAllMemes(); 
+                await FechMemeInfo(props); 
             
             }
             else {
                 const data= await contractWithSigner.LikeMeme(id)
                 await data.wait()
-                await fetchAllMemes();
+                await FechMemeInfo(props);
                 
             }
             setLoadingLike(false)
@@ -165,30 +172,11 @@ export default function Feed (props) {
             if(!res.ok) {
                 return;
             }
-            const LikesAddress = i.LikesAddresses;
-            const StarredAddress = i.StarredAddresses;
-            for (let i = 0; i < LikesAddress.length; i++) {
-                const Address = person.toLowerCase()
-                const CurrentAddress = LikesAddress[i]
-                if(Address == CurrentAddress ){
-                    SetDidILikeMeme(true)
-                }
-                else{
-                    SetDidILikeMeme(false)
-                }
+           
+                const StarAnswer= await contractWithProvider.WhatDidIStar(i.id,person);
+                const LikeAnswer= await contractWithProvider.WhatDidILike(i.id,person);
                 
-            }
-            for (let i = 0; i < StarredAddress.length; i++) {
-                const Address = person.toLowerCase()
-                const CurrentAddress = StarredAddress[i]
-                if(Address == CurrentAddress ){
-                    SetDidIStarMeme(true)
-                }
-                else{
-                    SetDidIStarMeme(false)
-                }
                 
-            }
             let files = await res.files()
             const info =  await axios.get(`https://${files[0].cid}.ipfs.dweb.link`)
             let List = {
@@ -202,7 +190,10 @@ export default function Feed (props) {
                 Date:i.Date,
                 Id :i.id,
                 IsDownloadable : i.IsDownloadable,
-                FileType :i.FileType
+                FileType :i.FileType,
+                DidMemberStarMe: StarAnswer,
+                DidMemberLikeMe:LikeAnswer
+
             }
             return List
         })); 
@@ -294,17 +285,18 @@ export default function Feed (props) {
                                                         <button className='rounded-md border-2 border-black flex mt-3  items-center justify-around h-8 w-24 hover:bg-[#FFFF00] 'onClick={() => StarMeme(card.Id, card.DidMemberStarMe)}>
                                                             
                                                             {
-                                                                loadingStar ? 
+                                                               ((loadingStarId == card.Id) && loadingStar ) ? 
                                                                 (
-                                                                    <button className='bg-[#FFFF00] rounded-md border-2 border-black flex mt-3  items-center justify-around h-8 w-24'>
+                                                                    <button className='bg-[#FFFF00] rounded-md flex items-center justify-around h-7 w-24'>
                                                                         <h4>
-                                                                        <FaSpinner icon="spinner" className={styles.spinner} />
+                                                                        
+                                                                        <img src="/loader.png" alt="loading..." className='w-8 h-8 mt-2' />
                                                                         </h4>
                                                                     </button>
                                                                 ) 
                                                                 : 
                                                                 (
-                                                                    DidIStarMeme ?
+                                                                    (card.DidMemberStarMe == true) ?
                                                                     (
                                                                         <>
                                                                         <img src='./filledStar.png' alt='STAR'  className='w-5 h-5'  />
@@ -324,17 +316,17 @@ export default function Feed (props) {
                                                        <button className='rounded-md border-2 border-black flex mt-3  items-center justify-around h-8 w-24 hover:bg-[#ff0000] '  onClick={() => LikeMeme(card.Id, card.DidMemberLikeMe)}
                                                            >
                                                                 {
-                                                                loadingLike?
+                                                                ((loadingLikeId == card.Id) && loadingLike) ?
                                                                 (
-                                                                    <button className='rounded-md border-2 border-black flex mt-3  items-center justify-around h-8 w-24 bg-[#FFFF00] ' >
+                                                                    <button className='rounded-md border-2 border-black flex  items-center justify-around h-8 w-24 bg-[#FFFF00] ' >
                                                                         <h4>
-                                                                        <TailSpin color="#00BFFF" height={10} width={10} />
+                                                                        <img src='./filledStar.png' alt='STAR'  className='w-5 h-5'  />
                                                                         </h4>
                                                                     </button>
                                                                 ) 
                                                                 :
                                                                 (
-                                                                    DidILikeMeme ?
+                                                                    (card.DidMemberLikeMe == true) ?
                                                                         (
                                                                             
                                                                             <>
@@ -376,7 +368,7 @@ export default function Feed (props) {
                         loadingpage ? 
                         ( 
                             <div className='text-center text-8xl'>
-                               <TailSpin color="#00BFFF" height={80} width={80} />
+                              <img src="/loading.png" alt="loading..." />
                             </div>
                         ) 
                         : 
@@ -399,6 +391,7 @@ export default function Feed (props) {
                 <meta name="description" content="By Oleanji" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
+           
             <div className='flex flex-col space-y-6'>
                 <div className='flex flex-col items-end pt-3 px-2'>
                     <ConnectButton />
