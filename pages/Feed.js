@@ -2,14 +2,12 @@ import Head from 'next/head'
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useContract, useProvider,useSigner,useAccount,useBalance,useConnect  } from 'wagmi'
 import {MemeForestAddress,Token, ApiUriv} from '../constant'
-import { useEffect, useRef, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import MEME from '../artifacts/contracts/MemeForest.sol/MemeForest.json'
 import 'bootstrap/dist/css/bootstrap.css'
 import axios from "axios"
-import { FaSpinner } from 'react-icons/fa';
 import { createClient } from 'urql'
 import { Web3Storage } from 'web3.storage'
-import { Audio, TailSpin} from  'react-loader-spinner'
 
 
 
