@@ -6,6 +6,7 @@ import {
   configureChains,
   getDefaultWallets,
   RainbowKitProvider,
+  darkTheme 
 } from '@rainbow-me/rainbowkit';
 import 'bootstrap/dist/css/bootstrap.css'
 import { chain, createClient, WagmiProvider } from 'wagmi';
@@ -47,7 +48,14 @@ function MyApp({ Component, pageProps }) {
     <div >
      
       <WagmiProvider client={wagmiClient}>
-      <RainbowKitProvider chains={chains}>
+      <RainbowKitProvider 
+    //   theme={darkTheme({
+    //   accentColor: '#22c55e',
+    //   accentColorForeground: 'white',
+    //   borderRadius: 'large',
+    //   fontStack: 'system'
+    // })} 
+    chains={chains}>
       <div className=''>
       {
       loader ?

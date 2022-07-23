@@ -199,165 +199,9 @@ export default function Feed (props) {
     }
     const renderButton = () => {
         
-        if (Memeslength>0){
-            return(
-                <div className='grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-4 px-5 py-2 ' >
-                    {
-                        memberDetails.map((card,i) => {
-                            return(  
-                                <div key={i} className='w-full shadow-md p-3 rounded-3xl bg-gray-50 '>
-                                    {
-                                          <div className='flex flex-col' >
-                                                <div className='group flex flex-row items-center justify-center overflow-hidden rounded-lg '  >
-                                                    <a href={card.File} target='_blank' rel="noreferrer" >  
-                                                       {
-                                                           (card.FileType == "img/png") ?
-                                                           (
-                                                            <img src={`https://${card.image}.ipfs.dweb.link/image`}  className='w-full rounded-lg h-36 group-hover:scale-150 transition ease duration-300' alt="..." />
-                                                           )
-                                                           :
-                                                           (
-                                                            <video src={`https://${card.image}.ipfs.dweb.link/image`}  className='w-full rounded-lg h-36 group-hover:scale-150 transition ease duration-300' alt="..."  width="500px" height="500px"  controls="controls"/> 
-                                                           )
-                                                       } 
-                                                       
-                                                    </a>
-                                                    <div className=' hidden p-1 rounded-lg bg-gray-700 text-gray-100 font-medium text-xs group-hover:inline absolute self-start  ' >
-                                                        {
-                                                            props.members.map((lists,i) => {
-                                                                return(
-                                                                    
-                                                                    <div key={i}  >
-                                                                    {
-                                                                        lists.Adddress == card.Owner &&
-                                                                        <div>
-                                                                            {lists.Name}
-                                                                        </div>
-                                                                    }
-                                                                    </div>
-                                                                )
-                                                            })
-                                                        
-                                                        }
-                                                    </div>
-                                                    <div className='hidden p-1 rounded-lg bg-gray-700 text-gray-100 font-thin text-xs group-hover:inline absolute self-end'  >
-                                                        {
-                                                            card.Date
-                                                        
-                                                        }
-                                                    </div>
-                                               </div>
-                                                <div className='py-2 px-3 border-2 border-gray-500 h-auto mx-2 mt-4 rounded-lg' >
-                                                    <div className='grid grid-rows grid-flow-col gap-1  ' >
-                                                        
-                                                    {
-                                                            card.Name.length > 7 ?
-                                                        (
-                                                            <div className='flex items-end row-start-2 row-span-2 rounded-lg font-black text-xs  ' >
-                                                                {card.Name}
-                                                            </div> 
-                                                        ) : 
-                                                        (
-                                                            <div className='flex items-end row-start-2 row-span-2 rounded-lg font-black text-sm  '>
-                                                                  {card.Name}
-                                                            </div> 
-                                                        )
 
-                                                     }
-                                                        {
-                                                            card.IsDownloadable &&
-                                                            <div className='row-start-2 row-span-2 flex items-center justify-center rounded-lg shadow-md py-2 hover:shadow-xl transition ease ' >
-                                                                <a href={`https://${card.image}.ipfs.dweb.link/image`} download target='_blank' rel="noreferrer" onClick={(e) =>download(card.image,card.Name)}>  
-                                                                <img src='./arrow.png' alt='' className='h-5 w-5 mt-1' />
-                                                                </a>
-                                                       
-                                                             </div>
-                                                        }
-                                                        
-                                                    </div>
-                                                    
-                                                    <div className='rounded-md mt-3 text-sm h-auto ' >
-                                                        {card.Description} 
-                                                    </div>
-                                                    <div className='flex flex-row  justify-between'>
-                                                        <button className='rounded-md border-2 border-black flex mt-3  items-center justify-around h-8 w-24 hover:bg-[#FFFF00] 'onClick={() => StarMeme(card.Id, card.DidMemberStarMe)}>
-                                                            
-                                                            {
-                                                               ((loadingStarId == card.Id) && loadingStar ) ? 
-                                                                (
-                                                                    <button className='bg-[#FFFF00] rounded-md flex items-center justify-around h-7 w-24'>
-                                                                        <h4>
-                                                                        
-                                                                        <img src="/loader.png" alt="loading..." className='w-8 h-8 mt-2' />
-                                                                        </h4>
-                                                                    </button>
-                                                                ) 
-                                                                : 
-                                                                (
-                                                                    (card.DidMemberStarMe == true) ?
-                                                                    (
-                                                                        <>
-                                                                        <img src='./filledStar.png' alt='STAR'  className='w-5 h-5'  />
-                                                                        {card.NumberOfStars}
-                                                                        </>
-                                                                    ) 
-                                                                    :
-                                                                    (
-                                                                        <>
-                                                                        <img src='./strokeStar.png' alt='STAR' className='w-5 h-5'  />
-                                                                        {card.NumberOfStars}
-                                                                        </>
-                                                                    )
-                                                                )
-                                                            }
-                                                        </button>
-                                                       <button className='rounded-md border-2 border-black flex mt-3  items-center justify-around h-8 w-24 hover:bg-[#ff0000] '  onClick={() => LikeMeme(card.Id, card.DidMemberLikeMe)}
-                                                           >
-                                                                {
-                                                                ((loadingLikeId == card.Id) && loadingLike) ?
-                                                                (
-                                                                    <button className='rounded-md border-2 border-black flex  items-center justify-around h-8 w-24 bg-[#FFFF00] ' >
-                                                                        <h4>
-                                                                        <img src='./filledStar.png' alt='STAR'  className='w-5 h-5'  />
-                                                                        </h4>
-                                                                    </button>
-                                                                ) 
-                                                                :
-                                                                (
-                                                                    (card.DidMemberLikeMe == true) ?
-                                                                        (
-                                                                            
-                                                                            <>
-                                                                                <img src='./filledLove.png' alt='STAR'  className='w-5 h-5'  />
-                                                                                {card.NumberOfLikes}
-                                                                            </>
-                                                                        ) 
-                                                                        :
-                                                                        (
-                                                                            <>
-                                                                                <img src='./UnfilledLove.png' alt='STAR' className='w-5 h-5'  />
-                                                                                {card.NumberOfLikes}
-                                                                            </>
-                                                                        )
-                                                                )
-                                                            }
-                                                        </button>
-                                                        
-                                                    </div>
-                                                    
-                                                </div>
-                                            </div>
-                                       
-                                    }
-                                </div>
-                            )
-                        })
-                    }
-                </div>
-            ) 
-        }
 
-        if(memes.length == 0) {
+        if(Memeslength == 0) {
             return (
                 <div className='flex flex-row items-center justify-center' >
 
@@ -379,6 +223,181 @@ export default function Feed (props) {
                 </div>
             )
         }
+        if (Memeslength>0){
+            return(
+                <>
+                {
+                    loadingpage ? 
+                    ( 
+                        <div className='flex flex-row items-center justify-center' >
+                            <div className='text-center text-8xl'>
+                                <img src="/loading.png" alt="loading..." />
+                            </div>
+                        </div>
+                    ) 
+                    : 
+                    (
+                        <div className='grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-4 px-5 py-2 ' >
+                        {
+                            memberDetails.map((card,i) => {
+                                return(  
+                                    <div key={i} className='w-full shadow-md p-3 rounded-3xl bg-gray-50 '>
+                                        {
+                                              <div className='flex flex-col' >
+                                                    <div className='group flex flex-row items-center justify-center overflow-hidden rounded-lg '  >
+                                                        <a href={card.File} target='_blank' rel="noreferrer" >  
+                                                           {
+                                                               (card.FileType == "img/png") ?
+                                                               (
+                                                                <img src={`https://${card.image}.ipfs.dweb.link/image`}  className='w-full rounded-lg h-36 group-hover:scale-150 transition ease duration-300' alt="..." />
+                                                               )
+                                                               :
+                                                               (
+                                                                <video src={`https://${card.image}.ipfs.dweb.link/image`}  className='w-full rounded-lg h-36 group-hover:scale-150 transition ease duration-300' alt="..."  width="500px" height="500px"  controls="controls"/> 
+                                                               )
+                                                           } 
+                                                           
+                                                        </a>
+                                                        <div className=' hidden p-1 rounded-lg bg-gray-700 text-gray-100 font-medium text-xs group-hover:inline absolute self-start  ' >
+                                                            {
+                                                                props.members.map((lists,i) => {
+                                                                    return(
+                                                                        
+                                                                        <div key={i}  >
+                                                                        {
+                                                                            lists.Adddress == card.Owner &&
+                                                                            <div>
+                                                                                {lists.Name}
+                                                                            </div>
+                                                                        }
+                                                                        </div>
+                                                                    )
+                                                                })
+                                                            
+                                                            }
+                                                        </div>
+                                                        <div className='hidden p-1 rounded-lg bg-gray-700 text-gray-100 font-thin text-xs group-hover:inline absolute self-end'  >
+                                                            {
+                                                                card.Date
+                                                            
+                                                            }
+                                                        </div>
+                                                   </div>
+                                                    <div className='py-2 px-3 border-2 border-gray-500 h-auto mx-2 mt-4 rounded-lg' >
+                                                        <div className='grid grid-rows grid-flow-col gap-1  ' >
+                                                            
+                                                        {
+                                                                card.Name.length > 7 ?
+                                                            (
+                                                                <div className='flex items-end row-start-2 row-span-2 rounded-lg font-black text-xs  ' >
+                                                                    {card.Name}
+                                                                </div> 
+                                                            ) : 
+                                                            (
+                                                                <div className='flex items-end row-start-2 row-span-2 rounded-lg font-black text-sm  '>
+                                                                      {card.Name}
+                                                                </div> 
+                                                            )
+    
+                                                         }
+                                                            {
+                                                                card.IsDownloadable &&
+                                                                <div className='row-start-2 row-span-2 flex items-center justify-center rounded-lg shadow-md py-2 hover:shadow-xl transition ease ' >
+                                                                    <a href={`https://${card.image}.ipfs.dweb.link/image`} download target='_blank' rel="noreferrer" onClick={(e) =>download(card.image,card.Name)}>  
+                                                                    <img src='./arrow.png' alt='' className='h-5 w-5 mt-1' />
+                                                                    </a>
+                                                           
+                                                                 </div>
+                                                            }
+                                                            
+                                                        </div>
+                                                        
+                                                        <div className='rounded-md mt-3 text-sm h-auto ' >
+                                                            {card.Description} 
+                                                        </div>
+                                                        <div className='flex flex-row  justify-between'>
+                                                            <button className='rounded-md border-2 border-black flex mt-3  items-center justify-around h-8 w-24 hover:bg-[#FFFF00] 'onClick={() => StarMeme(card.Id, card.DidMemberStarMe)}>
+                                                                
+                                                                {
+                                                                   ((loadingStarId == card.Id) && loadingStar ) ? 
+                                                                    (
+                                                                        <button className='bg-[#FFFF00] rounded-md flex items-center justify-around h-7 w-24'>
+                                                                            <h4>
+                                                                            
+                                                                            <img src="/loader.png" alt="loading..." className='w-8 h-8 mt-2' />
+                                                                            </h4>
+                                                                        </button>
+                                                                    ) 
+                                                                    : 
+                                                                    (
+                                                                        (card.DidMemberStarMe == true) ?
+                                                                        (
+                                                                            <>
+                                                                            <img src='./filledStar.png' alt='STAR'  className='w-5 h-5'  />
+                                                                            {card.NumberOfStars}
+                                                                            </>
+                                                                        ) 
+                                                                        :
+                                                                        (
+                                                                            <>
+                                                                            <img src='./strokeStar.png' alt='STAR' className='w-5 h-5'  />
+                                                                            {card.NumberOfStars}
+                                                                            </>
+                                                                        )
+                                                                    )
+                                                                }
+                                                            </button>
+                                                           <button className='rounded-md border-2 border-black flex mt-3  items-center justify-around h-8 w-24 hover:bg-[#ff0000] '  onClick={() => LikeMeme(card.Id, card.DidMemberLikeMe)}
+                                                               >
+                                                                    {
+                                                                    ((loadingLikeId == card.Id) && loadingLike) ?
+                                                                    (
+                                                                        <button className='rounded-md border-2 border-black flex  items-center justify-around h-8 w-24 bg-[#FFFF00] ' >
+                                                                            <h4>
+                                                                            <img src='./filledStar.png' alt='STAR'  className='w-5 h-5'  />
+                                                                            </h4>
+                                                                        </button>
+                                                                    ) 
+                                                                    :
+                                                                    (
+                                                                        (card.DidMemberLikeMe == true) ?
+                                                                            (
+                                                                                
+                                                                                <>
+                                                                                    <img src='./filledLove.png' alt='STAR'  className='w-5 h-5'  />
+                                                                                    {card.NumberOfLikes}
+                                                                                </>
+                                                                            ) 
+                                                                            :
+                                                                            (
+                                                                                <>
+                                                                                    <img src='./UnfilledLove.png' alt='STAR' className='w-5 h-5'  />
+                                                                                    {card.NumberOfLikes}
+                                                                                </>
+                                                                            )
+                                                                    )
+                                                                }
+                                                            </button>
+                                                            
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+                                           
+                                        }
+                                    </div>
+                                )
+                            })
+                        }
+                    </div>
+                    )
+                }
+                </>
+              
+            ) 
+        }
+
+        
         
     }
 

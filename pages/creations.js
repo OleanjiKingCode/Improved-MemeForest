@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useContract, useProvider,useSigner,useAccount,useBalance,useConnect  } from 'wagmi'
-import {MemeForestAddress} from '../constant'
+import {MemeForestAddress,Token, ApiUriv} from '../constant'
 import { useEffect, useRef, useState, useContext } from "react";
 import MEME from '../artifacts/contracts/MemeForest.sol/MemeForest.json'
 import 'bootstrap/dist/css/bootstrap.css'
@@ -10,15 +10,13 @@ import { createClient } from 'urql'
 import { Web3Storage } from 'web3.storage'
 import { useRouter } from 'next/router';
 
-// const {data} = useAccount();
-const person = data?.address
 
 const MemesQuery= `
-query {
+query($Person: Bytes) {
     memes(
-    orderBy : Date ,
+    orderBy : Date , 
     orderDirection: desc,
-    where: { Owner: ${person} }
+    where: { Owner: $Person }
         ) 
     {
         id
@@ -278,7 +276,7 @@ const fetchMyMemes = async (props) => {
             )
         }
         if(AMember) {
-            if(memeDetails.length == 0) 
+            if(myMemes.length == 0) 
             {
              return (
                  <div>
@@ -496,7 +494,10 @@ const fetchMyMemes = async (props) => {
 }
 
 async function GetData() {
-    const data = await client.query(MemesQuery).toPromise()
+    const {acc} = useAccount()
+    const person = acc?.address;
+    const data = await client.query(MemesQuery,person).toPromise()
+   
     return (data.data.memes)
   }
   async function MemInfo() {

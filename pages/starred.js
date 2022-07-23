@@ -262,7 +262,7 @@ export default function Starred (props) {
                     ) 
                     : 
                     (
-                        <div className='flex flex-row items-center justify-center ' > 
+                        <div className='flex flex-col items-center justify-center ' > 
                             <div className='text-center font-bold text-lg '>
                                 You have No Starred Memes Go back to Create Memes 
                             </div>
