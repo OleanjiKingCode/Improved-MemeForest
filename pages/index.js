@@ -1,9 +1,10 @@
 import Head from 'next/head'
+import Image from 'next/image'
+import Web3Modal from "web3modal";
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useContract, useProvider,useSigner,useAccount,useBalance,useConnect  } from 'wagmi'
 import {MemeForestAddress,ApiUriv} from '../constant'
 import { useEffect, useRef, useState, useContext } from "react";
-import BigNumber from 'bignumber.js';
 import MEME from '../artifacts/contracts/MemeForest.sol/MemeForest.json'
 import { createClient } from 'urql'
 
@@ -49,8 +50,7 @@ export default function Home(props) {
       signerOrProvider: provider,
     })
     useEffect(() => {
-      const Newperson = person?.toLocaleLowerCase()
-      setAddress(Newperson);
+      PageLoad()
       checkIfAMember(props);
      
   }, []);
@@ -82,17 +82,18 @@ export default function Home(props) {
     try {
         
         let data = props.members;
+        const addresses = ['']
+        console.log(data)
         const tx = await Promise.all(data.map(async i => {
-            const member = i.Adddress;
-            const Address = person.toLowerCase()
-            if(Address == member) {
-                setAMember(true)
-            }
-            else{
-                setAMember(false)
-            }
-            return AMember
+            
+            addresses.push(i.Adddress)
+            return addresses
         }));
+        const Address = person.toLowerCase()
+        setAddress(Address);
+        const isThere = addresses.includes(Address)
+        console.log(isThere)
+        setAMember(isThere)
         console.log(tx)
     } catch (e) {
         console.log(e)
@@ -101,10 +102,56 @@ export default function Home(props) {
 }
 
 
-
   
 const renderButton = () => {
+
+
+  if(!AMember) {
+    return (
+      <div className='flex items-center w-full h-full border border-slate-900 z-0'> 
+      <div className=' flex flex-col md:flex-row items-center w-full h-full '>
+          <div className='w-full basis-3/5 md:ml-4 mt-4 md:mt-0'>
+            01
+          </div>
+          <div className='flex flex-column items-center w-full basis-2/5 space-y-6 p-20 mr-4 mt-10'>
+              <div className='flex items-center text-3xl text-black font-bold'>
+                Welcome To NFT <span className='text-green-500'> Air </span>
+              </div>
+              <div className='text-sm text-gray-400'>
+                Register to become a Member
+              </div>
+              <div className='pt-2 w-full'>
+                <input className='px-2 py-1 h-10 font-semibold text-sm w-full border rounded-xl ' placeholder='Enter your Name'  onChange={e => setName(e.target.value)}/>
+              </div>
+              <div className='flex flex-col items-center  justify-center w-full'>
+                {
+                  loading ?
+                  <button className='text-lg text-gray-50  font-semibold w-full py-2 bg-white  rounded-xl '>
+                   <img src="/loader.png" alt="loading..." className='w-8 h-8 mt-2' />
+                  </button>
+                  :
+                  
+                  <button className='text-lg text-gray-50  font-semibold w-full py-2 bg-green-500 hover:bg-gray-50 hover:text-green-500 border hover:border-slate-100 rounded-xl'
+                  onClick={joinMembership}>
+                    Register
+                  </button>
+                }
+                
+                <span className='text-sm text-gray-400 pt-1'> ------------OR------------</span>
+                <div className=' text-gray-50 text-xs pt-3 flex items-center justify-center'>
+                 <ConnectButton />
+                </div>
+              </div>
+          </div>
+          </div>
+      </div>
+    )
+  }
+
+  
+
   if (AMember) {
+    console.log("sidvhuiosvksvuinsidv")
     return(
       <div>
           <div style={{fontSize:"19px", fontWeight:"700"}}>
@@ -116,7 +163,7 @@ const renderButton = () => {
                     <div key={i}  style={{fontSize:"20px", fontWeight:"700"}}>
                       {
                         
-                       (lists.Adddress == Address) &&
+                       lists.Adddress == Address &&
                        
                         <div className='flex flex-col w-full items-center justify-between space-y-20'>
                           <div className='shadow-sm w-full bg-green-400'>
@@ -173,51 +220,9 @@ const renderButton = () => {
       </div>
       )
   }
-
-  if(!AMember) {
-    return (
-      <div className='flex items-center w-full h-full border border-slate-900 z-0'> 
-      <div className=' flex flex-col md:flex-row items-center w-full h-full '>
-          <div className='w-full basis-3/5 md:ml-4 mt-4 md:mt-0'>
-            01
-          </div>
-          <div className='flex flex-column items-center w-full basis-2/5 space-y-6 p-20 mr-4 mt-10'>
-              <div className='flex items-center text-3xl text-black font-bold'>
-                Welcome To NFT <span className='text-green-500'> Air </span>
-              </div>
-              <div className='text-sm text-gray-400'>
-                Register to become a Member
-              </div>
-              <div className='pt-2 w-full'>
-                <input className='px-2 py-1 h-10 font-semibold text-sm w-full border rounded-xl ' placeholder='Enter your Name'  onChange={e => setName(e.target.value)}/>
-              </div>
-              <div className='flex flex-col items-center  justify-center w-full'>
-                {
-                  loading ?
-                  
-                  <button className='text-lg text-gray-50  font-semibold w-full py-2 bg-white  rounded-xl '>
-                   <img src="/loader.png" alt="loading..." className='w-8 h-8 mt-2' />
-                  </button>
-                  :
-                  
-                  <button className='text-lg text-gray-50  font-semibold w-full py-2 bg-green-500 hover:bg-gray-50 hover:text-green-500 border hover:border-slate-100 rounded-xl'
-                  onClick={joinMembership}>
-                    Register
-                  </button>
-                }
-                
-                <span className='text-sm text-gray-400 pt-1'> ------------OR------------</span>
-                <button className=' text-gray-50 text-xs pt-3 flex items-center justify-center'>
-                 <ConnectButton />
-                </button>
-              </div>
-          </div>
-          </div>
-      </div>
-    )
-  }
-  
 }
+
+
 
 
 

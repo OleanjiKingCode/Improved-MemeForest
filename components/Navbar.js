@@ -46,7 +46,7 @@ function Navbar () {
                                     </div>
                                 </Link>
 
-                                <Link href="/pages/create" className=' cusor-pointer '>
+                                <Link href="/create" className=' cusor-pointer '>
                                     <button className='no-underline bg-green-500 py-2 px-3 rounded-lg font-bold text-teal-50 hover:bg-orange-500 cursor-pointer '>
                                         Create NFT
                                     </button>

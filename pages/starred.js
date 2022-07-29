@@ -5,7 +5,6 @@ import { useContract, useProvider,useSigner,useAccount,useBalance,useConnect  } 
 import {MemeForestAddress,Token, ApiUriv} from '../constant'
 import { useEffect, useRef, useState, useContext } from "react";
 import MEME from '../artifacts/contracts/MemeForest.sol/MemeForest.json'
-import 'bootstrap/dist/css/bootstrap.css'
 import axios from "axios"
 import { createClient } from 'urql'
 import { Web3Storage } from 'web3.storage'
@@ -58,7 +57,7 @@ export default function Starred (props) {
     const { data} = useAccount()
     const person = data?.address;
     const[loadingStarId, setLoadingStarId] = useState(0)
-    const [memes,setMemes] = useState([])
+    const [addressinquery,Addressfromquery] = useState([])
     const[loadingStar, setLoadingStar] = useState(false)
     const[DidIStarMeme, SetDidIStarMeme] =useState(false)
     const[DidILikeMeme, SetDidILikeMeme] =useState(false)
@@ -84,14 +83,10 @@ export default function Starred (props) {
 
     useEffect(() => {
         PageLoad();
+        checkIfAMember(props);
         StarredMemes(props);
-}, []);
-    useEffect(() => {
-       
-        if(!AMember){
-            checkIfAMember(props);
-        }
-    }, [AMember]);
+    }, []);
+
    
     const PageLoad = async () =>{
         try {
@@ -107,17 +102,17 @@ export default function Starred (props) {
         try {
             
             let data = props.members;
+            const addresses = ['']
+            console.log(data)
             const tx = await Promise.all(data.map(async i => {
-                const member = i.Adddress;
-                const Address = person.toLowerCase()
-                if(Address == member) {
-                    setAMember(true)
-                }
-                else{
-                    setAMember(false)
-                }
-                return AMember
+                
+                addresses.push(i.Adddress)
+                return addresses
             }));
+            const Address = person.toLowerCase()
+            const isThere = addresses.includes(Address)
+            console.log(isThere)
+            setAMember(isThere)
             console.log(tx)
         } catch (e) {
             console.log(e)

@@ -3,15 +3,33 @@ import Web3Modal from "web3modal";
 import styles from '../styles/Home.module.css'
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useContract, useProvider,useSigner,useAccount  } from 'wagmi'
-import {MemeForestAddress, Token} from '../constant'
+import {MemeForestAddress, Token, ApiUriv} from '../constant'
 import { useEffect, useState, useContext } from "react";
 import MEME from '../artifacts/contracts/MemeForest.sol/MemeForest.json'
+import { createClient } from 'urql'
 import { useRouter } from 'next/router';
 import { FaSpinner } from 'react-icons/fa';
 import { Web3Storage } from 'web3.storage'
 
 
-export default function Create () {
+const MemberQuery= `
+query {
+  memebers{
+    Name
+    Adddress
+    TotalMeme
+    StarredMemes
+    Date
+  }
+}
+`
+
+const client = createClient({
+  url: ApiUriv,
+})    
+  
+
+export default function Create (props) {
 
     const { data} = useAccount()
     const person = data?.address;
@@ -23,6 +41,8 @@ export default function Create () {
     const[loading, setLoading] = useState(false)
     const[IsVideo, setIsVideo] = useState(false)
     const[IsImage, setIsImage] = useState(false)
+    
+    const[loadingpage,setLoadingPage] = useState(false)
     const[valueExtension, setValueExtension] = useState("")
     const provider = useProvider()
     const [numberOfLoading, setNumberOfLoading] = useState(3)
@@ -41,34 +61,43 @@ export default function Create () {
     const counter = 1;
     const router = useRouter()
     useEffect(() => {
-
-
-        if(!AMember){
-            checkIfAMember();
-        }
-    }, [AMember]);
+        PageLoad()
+       
+            checkIfAMember(props);
+       
+    }, []);
    
-
-    const checkIfAMember = async () => {
+    const PageLoad = async () =>{
         try {
-           
-            const tx= await contractWithProvider.IsAMember(person)
+            setLoadingPage(true)
+            const delay = ms => new Promise(res => setTimeout(res, ms));
+            await delay(7000);
+            setLoadingPage(false)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+    const checkIfAMember = async (props) => {
+        try {
             
-          
-            if(tx) {
-            
-            setAMember(true)
-            }
-            else{
-            setAMember(false)
-            }
-            
+            let data = props.members;
+            const addresses = ['']
+            console.log(data)
+            const tx = await Promise.all(data.map(async i => {
+                
+                addresses.push(i.Adddress)
+                return addresses
+            }));
+            const Address = person.toLowerCase()
+            const isThere = addresses.includes(Address)
+            console.log(isThere)
+            setAMember(isThere)
+            console.log(tx)
         } catch (e) {
             console.log(e)
             setAMember(false)
         }
     }
-
 
     const CreateMemes = async (memeInfo, valueExt) => {
         try {
@@ -176,24 +205,50 @@ export default function Create () {
     const renderButton = () =>{
         if(!AMember){
             return (
-                <div style={{ padding:"20px", textAlign:"center",margin:"5px 0 5px 0",height:"80vh",top:"50%", left:"50%", display:"flex", alignItems:"center",justifyContent:"center" ,flexDirection:"column" }}> 
-                    <div style={{fontSize:"18px"}}>
-                        Go Back Home and Register before Uploading Memes 
-                    </div>
-                    <button onClick={gohome} style={{padding:"10px 15px", marginLeft:"10px",color:"black",marginTop:"10px",
-                    backgroundColor:"greenyellow",fontSize:"14px",borderRadius:"10px"}}> 
-                        Home
-                    </button>
-                </div>
+                <div>
+                    {
+                    loadingpage ? 
+                    ( 
+                        <div className='flex flex-row items-center justify-center text-8xl '>
+                           <img src="/loading.png" alt="loading..." />
+                        </div>
+                    ) 
+                    : 
+                    (
+                        <div className='flex flex-col items-center justify-center '> 
+                            <div className='text-center font-bold text-lg '>
+                                Go Back Home and Register before Uploading Memes 
+                            </div>
+                            <button onClick={gohome} className='no-underline bg-green-500 py-2 px-3 rounded-lg font-bold text-teal-50 hover:bg-orange-500 cursor-pointer ' > 
+                                Home
+                            </button>
+                        </div>
+                    )
+                    }
+                </div>  
             )
         }
         if(AMember){
-            if(counter) {
+           
                 return( 
-                    <div className={styles.Memebox} style={{borderRadius:"25px", padding:"20px", textAlign:"center",margin:"20px 0 20px 0" }}> 
-                        <h3>
-                            UPLOAD YOUR MEME 
-                        </h3>
+                    <>
+                {
+                    loadingpage ? 
+                    ( 
+                        <div className='flex flex-row items-center justify-center' >
+                            <div className='text-center text-8xl'>
+                                <img src="/loading.png" alt="loading..." />
+                            </div>
+                        </div>
+                    ) 
+                    : 
+                    (
+                    <div className='flex flex-col'> 
+                        
+                            <h3 className='text-center font-bold text-lg self-center'>
+                                YOUR STARRED MEMES
+                            </h3>
+
                         <div className={styles.createBox}>
                         <div style={{padding:"10px", margin:"15px",  display:"flex", alignItems:"center", justifyContent:"space-between"}}>
                             <div style={{textAlign:"left"}}>
@@ -271,45 +326,45 @@ export default function Create () {
                         
                     </div>
                     </div>
-                    
-                )
-            }
-            {
-                return(
-                    <div style={{ padding:"20px", textAlign:"center",margin:"5px 0 5px 0" }}> 
-                    <div style={{fontSize:"18px"}}>
-                        Go To Fund Your Account before Uploading Memes as its lower than 0.01 
-                    </div>
-                    <button onClick={Fund} style={{padding:"10px 15px", marginLeft:"10px",color:"black", marginTop:"10px",
-                    backgroundColor:"greenyellow",fontSize:"14px",borderRadius:"10px"}}> 
-                        Fund
-                    </button>
-                </div>
-                )
-            }
-
+                    )
+                } 
+                </>
+            )
         }
     }
 
 
     return (
-        <div>
-          <Head>
-            <title>Home</title>
-            <meta name="description" content="By Oleanji" />
-            <link rel="icon" href="/favicon.ico" />
-          </Head>
-        <div className={styles.topper}>
-        <img src='./LogoForest.png'  style={{width:"283px", height:"107px", marginTop:"-20px"}}/>
-          <div className={styles.connect}>
-            <ConnectButton />
-          </div>
-        </div>
-          <div className={styles.mains}>
-              {renderButton()}
-          </div>
-    
-          
+        <div> 
+            <Head>
+                <title>Home</title>
+                <meta name="description" content="By Oleanji" />
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
+           
+            <div className='flex flex-col space-y-6'>
+                <div className='flex flex-col items-end pt-3 px-2'>
+                    <ConnectButton />
+                </div>
+                <div className=''> 
+                    {renderButton()}
+                </div>
+            </div>
         </div>
       )
 }
+
+
+
+  async function MemInfo() {
+    const info = await client.query(MemberQuery).toPromise()
+    return (info.data.memebers)
+  }
+  export async function getServerSideProps() {
+    const info = await MemInfo()
+    return{
+      props:{
+        members:info
+      }
+    }
+  }
