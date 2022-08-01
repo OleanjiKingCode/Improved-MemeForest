@@ -79,7 +79,6 @@ export default function Create (props) {
             
             let data = props.members;
             const addresses = ['']
-            console.log(data)
             const tx = await Promise.all(data.map(async i => {
                 
                 addresses.push(i.Adddress)
@@ -87,9 +86,7 @@ export default function Create (props) {
             }));
             const Address = person.toLowerCase()
             const isThere = addresses.includes(Address)
-            console.log(isThere)
             setAMember(isThere)
-            console.log(tx)
         } catch (e) {
             console.log(e)
             setAMember(false)
@@ -101,7 +98,9 @@ export default function Create (props) {
         
          
             let time = new Date().toLocaleString();
-            let downloadable = true;
+            let downloadable;
+            IsDownloadable ?  downloadable = true : downloadable = false ;
+            
             const create = await contractWithSigner.CreateMemeItems(memeInfo,person,time,valueExt,downloadable)
             setNumberOfLoading(1)
             await create.wait()
@@ -125,26 +124,35 @@ export default function Create (props) {
     }
     const Uploading = async (valueExt) => {
         try {
-            setLoading(true)
-            console.log(client)
-            const client = makeStorageClient()
-            const file = new File([Image], 'image', { type: 'img/png' })
-            const cid = await client.put([file])
-            console.log("Stage One")
-            const data = JSON.stringify ({
-                nameOfFile, 
-                DescriptionOfFile, 
-                image:cid
-            })
-            setNumberOfLoading(2)
-            const blob = new Blob([data], { type: 'application/json' })
-            const files = [
-               
-                new File([blob], 'MemeInfo')
-              ]
-            const MemeInfo = await client.put(files)
-            console.log(":faiulegaiozkfiajetgjea9uuggopek90g90kierjf")
-            CreateMemes(MemeInfo,valueExt);
+            if(!nameOfFile) {
+                alert("Name of Meme is not there")
+            }
+            if(!DescriptionOfFile) {
+                alert("Description of Meme is not there")
+            }
+            if(!Image) {
+                alert("Put in a picture of your meme")
+            }
+            if(nameOfFile && DescriptionOfFile ) {
+                setLoading(true)
+                const client = makeStorageClient()
+                const file = new File([Image], 'image', { type: 'img/png' })
+                const cid = await client.put([file])
+                const data = JSON.stringify ({
+                    nameOfFile, 
+                    DescriptionOfFile, 
+                    image:cid
+                })
+                setNumberOfLoading(2)
+                const blob = new Blob([data], { type: 'application/json' })
+                const files = [
+                
+                    new File([blob], 'MemeInfo')
+                ]
+                const MemeInfo = await client.put(files)
+                CreateMemes(MemeInfo,valueExt);
+            }
+            
             
         } catch (e) {
             console.log(e)
@@ -152,9 +160,6 @@ export default function Create (props) {
     }
     const gohome = () => {
         router.push('/')
-    }
-    const Fund = () => {
-        router.push('/funds')
     }
     const Feed = () => {
         router.push('/Feed')
@@ -181,7 +186,7 @@ export default function Create (props) {
                 setValueExtension("img/png")
             }
         }
-        
+        console.log("kbvuhsdbysudhyusdhyusd")
         if(file){
             const image = URL.createObjectURL(file)
             setViewing(image)
@@ -246,7 +251,7 @@ export default function Create (props) {
                                CREATE YOUR MEME AND SHOW THE WORLD
                             </h3>
 
-                        <div className='flex items-center justify-center py-2 w-4/5 space-x-8'>
+                        <div className='flex flex-col md:flex-row items-center justify-center py-2 w-4/5 space-y-8 md:space-x-8'>
                             <div className=' w-full self-start top-0 py-2'>
                                 <div className='flex flex-col space-y-4 items-center justify-start p-3 '>
                                     <div className=' self-start font-semibold' >
@@ -274,7 +279,7 @@ export default function Create (props) {
                             <div className='py-2 w-full flex flex-col items-center justify-center'>
                                 {
                                     viewing?  
-                                    <div> 
+                                    <div className=' border-2 border-slate-400 '> 
                                         {
                                             IsImage?
                                             (
@@ -302,6 +307,9 @@ export default function Create (props) {
                                     type='checkbox'
                                      onChange={e => SetIsDownloadable(e.target.value) }
                                      />
+                                     {
+                                        console.log(IsDownloadable)
+                                     }
                                 </div>
                                 <div className='flex flex-row space-x-3 items-center justify-start p-3 w-full '>
                                     <div className='font-semibold' >
@@ -316,9 +324,9 @@ export default function Create (props) {
                                     loading ? 
                                     (
 
-                                        <button className='text-lg text-gray-50  font-semibold w-full py-2 bg-white  rounded-xl '>
-                                        <img src="/loader.png" alt="loading..." className='w-8 h-8 mt-2' />
-                                            <span className='px-2 py-1 text-sm font-semibold '>
+                                        <button className=' flex items-center justify-center text-center w-full border border-slate-600 border-hidden px-2 py-2 font-semibold text-gray-50 text-lg mt-4 mx-4 bg-green-500  rounded-lg space-x-3 '>
+                                        <img src="/loader.png" alt="loading..." className='w-8 h-8 ' />
+                                            <span >
                                             {numberOfLoading}
                                             </span>
                                         </button>

@@ -69,6 +69,9 @@ export default function Home(props) {
     try {
       setLoading(true)
       let _time =  new Date().toLocaleString();
+      if(!name) {
+        alert("Name is not there")
+    }
       const join = await contractWithSigner.CreateMembers(name,_time)
       await join.wait()
       setLoading(false)
@@ -154,13 +157,13 @@ const renderButton = () => {
     console.log("sidvhuiosvksvuinsidv")
     return(
       <div>
-          <div style={{fontSize:"19px", fontWeight:"700"}}>
+          <div className='text-lg font-semibold'>
             {
               props.members.map((lists,i) => {
                 
                 return(
                     
-                    <div key={i}  style={{fontSize:"20px", fontWeight:"700"}}>
+                    <div key={i}  className='text-lg font-semibold'>
                       {
                         
                        lists.Adddress == Address &&
