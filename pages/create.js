@@ -1,6 +1,4 @@
 import Head from 'next/head'
-import Web3Modal from "web3modal";
-import styles from '../styles/Home.module.css'
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useContract, useProvider,useSigner,useAccount  } from 'wagmi'
 import {MemeForestAddress, Token, ApiUriv} from '../constant'
@@ -8,7 +6,6 @@ import { useEffect, useState, useContext } from "react";
 import MEME from '../artifacts/contracts/MemeForest.sol/MemeForest.json'
 import { createClient } from 'urql'
 import { useRouter } from 'next/router';
-import { FaSpinner } from 'react-icons/fa';
 import { Web3Storage } from 'web3.storage'
 
 
@@ -41,7 +38,7 @@ export default function Create (props) {
     const[loading, setLoading] = useState(false)
     const[IsVideo, setIsVideo] = useState(false)
     const[IsImage, setIsImage] = useState(false)
-    
+    const[IsDownloadable, SetIsDownloadable] = useState(false)
     const[loadingpage,setLoadingPage] = useState(false)
     const[valueExtension, setValueExtension] = useState("")
     const provider = useProvider()
@@ -243,88 +240,102 @@ export default function Create (props) {
                     ) 
                     : 
                     (
-                    <div className='flex flex-col'> 
+                    <div className='flex flex-col items-center justify-center  w-full'> 
                         
                             <h3 className='text-center font-bold text-lg self-center'>
-                                YOUR STARRED MEMES
+                               CREATE YOUR MEME AND SHOW THE WORLD
                             </h3>
 
-                        <div className={styles.createBox}>
-                        <div style={{padding:"10px", margin:"15px",  display:"flex", alignItems:"center", justifyContent:"space-between"}}>
-                            <div style={{textAlign:"left"}}>
-                              Name: 
+                        <div className='flex items-center justify-center py-2 w-4/5 space-x-8'>
+                            <div className=' w-full self-start top-0 py-2'>
+                                <div className='flex flex-col space-y-4 items-center justify-start p-3 '>
+                                    <div className=' self-start font-semibold' >
+                                    Name: 
+                                    </div>
+                                
+                                    <input type='text' 
+                                    placeholder='Name Of Meme'
+                                    onChange={e => setNameOfFile(e.target.value)}
+                                    className='p-1 border-2 border-slate-500 mx-4 rounded-lg w-3/4 self-start text-sm '
+                                    />
+                                </div>
+                                
+                                <div className='flex flex-col space-y-4 items-center justify-start p-3 '>
+                                    <div className=' self-start font-semibold'>
+                                        Description: 
+                                    </div>
+                                    <input type='text' 
+                                    placeholder='Describe your meme'
+                                    onChange={e => setDescriptionOfFile(e.target.value)}
+                                    className='p-1 border-2 border-slate-500 mx-4 rounded-lg w-3/4  self-start text-sm '
+                                />
+                                </div>
                             </div>
-                           
-                            <input type='text' 
-                             placeholder='Name Of Meme'
-                             onChange={e => setNameOfFile(e.target.value)}
-                             style={{padding:"10px", border:"1px solid black" , marginLeft:"20px",borderRadius:"10px",width:"400px", fontSize:"10px"}}
-                           />
-                        </div>
-                        <div style={{padding:"10px", margin:"15px", display:"flex", alignItems:"center", justifyContent:"space-between"}}>
-                            <div style={{textAlign:"left"}}>
-                            File: 
-                            </div>
-                            <input type='file' 
-                             onChange={OnFileChange}
-                             style={{padding:"10px", border:"1px solid black" , marginLeft:"20px",borderRadius:"10px",width:"400px", fontSize:"10px"}}
-                           />
-                        </div>
-                        <div style={{padding:"10px", margin:"15px", display:"flex", alignItems:"center", justifyContent:"space-between"}}>
-                            <div style={{textAlign:"left"}}>
-                                 Description: 
-                            </div>
-                            <input type='Describe your meme' 
-                             placeholder='Name Of Meme'
-                             onChange={e => setDescriptionOfFile(e.target.value)}
-                             style={{padding:"10px", border:"1px solid black" , marginLeft:"20px",borderRadius:"10px",width:"400px", fontSize:"10px"}}
-                           />
-                        </div>
-                        {
-                            viewing && 
-                            <div> 
+                            <div className='py-2 w-full flex flex-col items-center justify-center'>
                                 {
-                                    IsImage?
-                                     (
-                                        <img src={viewing} alt='Your Image' style={{width:"400px", margin:"15px"}}/>
-                                    )
+                                    viewing?  
+                                    <div> 
+                                        {
+                                            IsImage?
+                                            (
+                                                <img src={viewing} alt='Your Image' className='w-32 m-4'/>
+                                            )
+                                            :
+                                            (
+                                                // <video src={viewing} width="500px" height="500px"   controls="controls"/> 
+                                                <video src={viewing} width="500px" height="500px" /> 
+                
+                                            )
+                                        }
+                                
+                                    </div>
                                     :
+                                    <div className='w-full h-auto border-2 border-slate-400 flex items-center justify-center '> 
+                                        <img src='/empty.png' alt='No image Here'  className='w-48 m-4'/>
+                                    </div>
+                                }
+                                <div className='flex flex-row space-x-3 items-center justify-start p-3 w-full'>
+                                    <div className='font-semibold'>
+                                        IsDownloadable ?
+                                    </div>
+                                    <input
+                                    type='checkbox'
+                                     onChange={e => SetIsDownloadable(e.target.value) }
+                                     />
+                                </div>
+                                <div className='flex flex-row space-x-3 items-center justify-start p-3 w-full '>
+                                    <div className='font-semibold' >
+                                    File: 
+                                    </div>
+                                    <input type='file' 
+                                    onChange={OnFileChange}
+                                    className='p-1 border-2 border-slate-500 mx-4 rounded-lg w-full text-sm '
+                                    />
+                                </div>
+                                {
+                                    loading ? 
                                     (
-                                        // <video src={viewing} width="500px" height="500px"   controls="controls"/> 
-                                        <video src={viewing} width="500px" height="500px" /> 
-          
+
+                                        <button className='text-lg text-gray-50  font-semibold w-full py-2 bg-white  rounded-xl '>
+                                        <img src="/loader.png" alt="loading..." className='w-8 h-8 mt-2' />
+                                            <span className='px-2 py-1 text-sm font-semibold '>
+                                            {numberOfLoading}
+                                            </span>
+                                        </button>
+                                    
+                                    ) : 
+                                    (
+                                        <button onClick={() => Uploading(valueExtension)}  
+                                        className='text-center w-full border border-slate-600 border-hidden px-2 py-2 font-semibold text-gray-50 text-sm mt-4 mx-4 bg-green-500 hover:text-green-500 hover:bg-white hover:border hover:border-slate-500 rounded-lg'
+                                        >
+                                        Create Meme
+                                        
+                                        </button>
                                     )
                                 }
-                           
-                            </div> 
-                        }
-                        
-                        {
-                            loading ? 
-                            (
-                                <button   style={{border:"none", textAlign:"center", 
-                                padding:"10px 20px",color:"white",  fontSize:"18px", 
-                                backgroundColor:"greenyellow",marginTop:"20px",marginLeft:"20px", borderRadius:"10px"}}>
-                                   
-                                    <FaSpinner icon="spinner" className={styles.spinner} />
-                                    <span style={{padding:"1px 6px", fontSize:"14px"}}>
-                                    {numberOfLoading}
-                                    </span>
-                                   
-                                </button>
-                               
-                            ) : 
-                            (
-                                <button onClick={() => Uploading(valueExtension)}  style={{border:"none", textAlign:"center", 
-                                padding:"10px 20px",color:"white",  fontSize:"18px", 
-                                backgroundColor:"greenyellow",marginTop:"20px",marginLeft:"20px", borderRadius:"10px"}}>
-                                 Create Meme
                                 
-                                </button>
-                            )
-                        }
-                        
-                    </div>
+                            </div>
+                        </div>
                     </div>
                     )
                 } 

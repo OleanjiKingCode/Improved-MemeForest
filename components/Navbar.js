@@ -40,11 +40,6 @@ function Navbar () {
                                        Creations
                                     </div>
                                 </Link>
-                                <Link href="/about" className=' cusor-pointer '>
-                                    <div className='no-underline font-semibold text-black-600 hover:text-orange-600 cursor-pointer'>
-                                        About
-                                    </div>
-                                </Link>
 
                                 <Link href="/create" className=' cusor-pointer '>
                                     <button className='no-underline bg-green-500 py-2 px-3 rounded-lg font-bold text-teal-50 hover:bg-orange-500 cursor-pointer '>
@@ -95,11 +90,6 @@ function Navbar () {
                                 <Link href="/creations" className=' cusor-pointer '>
                                     <div className='no-underline font-semibold text-lg text-black-600 hover:text-orange-600 cursor-pointer'>
                                        Creations
-                                    </div>
-                                </Link>
-                                <Link href="/about" className=' cusor-pointer '>
-                                    <div className='no-underline font-semibold text-lg text-black-600 hover:text-orange-600 cursor-pointer'>
-                                        About
                                     </div>
                                 </Link>
 
