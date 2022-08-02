@@ -198,7 +198,7 @@ export default function Feed (props) {
             }
             return List
         })); 
-        setMemberDetails(tx)
+        setMemberDetails(tx);
     }
     const renderButton = () => {
         
@@ -244,9 +244,11 @@ export default function Feed (props) {
                         {
                             memberDetails.map((card,i) => {
                                 return(  
-                                    <div key={i} className='w-full shadow-md p-3 rounded-3xl bg-gray-50 '>
+                                    <div key={i} >
                                         {
-                                             (card.Adddress == Address) &&
+                                            
+                                             (card.Owner == Address) &&
+                                             <div className='w-full shadow-md p-3 rounded-3xl bg-gray-50 '>
                                               <div className='flex flex-col' >
                                                     <div className='group flex flex-row items-center justify-center overflow-hidden rounded-lg '  >
                                                         <a href={card.File} target='_blank' rel="noreferrer" >  
@@ -387,7 +389,7 @@ export default function Feed (props) {
                                                         
                                                     </div>
                                                 </div>
-                                           
+                                           </div>
                                         }
                                     </div>
                                 )

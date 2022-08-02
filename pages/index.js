@@ -95,9 +95,7 @@ export default function Home(props) {
         const Address = person.toLowerCase()
         setAddress(Address);
         const isThere = addresses.includes(Address)
-        console.log(isThere)
         setAMember(isThere)
-        console.log(tx)
     } catch (e) {
         console.log(e)
         setAMember(false)
@@ -108,6 +106,14 @@ export default function Home(props) {
   
 const renderButton = () => {
 
+  if(!signer) {
+    return (
+      <div className='w-full h-full flex items-center justify-center '>
+         <ConnectButton />
+      </div>
+
+    )
+  }
 
   if(!AMember) {
     return (
@@ -154,7 +160,6 @@ const renderButton = () => {
   
 
   if (AMember) {
-    console.log("sidvhuiosvksvuinsidv")
     return(
       <div>
           <div className='text-lg font-semibold'>
@@ -244,7 +249,6 @@ const renderButton = () => {
 
 async function GetData() {
   const data = await client.query(MemberQuery).toPromise()
-  console.log(data)
   return data.data.memebers
 }
 

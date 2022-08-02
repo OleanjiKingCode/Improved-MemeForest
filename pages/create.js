@@ -186,7 +186,6 @@ export default function Create (props) {
                 setValueExtension("img/png")
             }
         }
-        console.log("kbvuhsdbysudhyusdhyusd")
         if(file){
             const image = URL.createObjectURL(file)
             setViewing(image)
@@ -307,9 +306,7 @@ export default function Create (props) {
                                     type='checkbox'
                                      onChange={e => SetIsDownloadable(e.target.value) }
                                      />
-                                     {
-                                        console.log(IsDownloadable)
-                                     }
+                                     
                                 </div>
                                 <div className='flex flex-row space-x-3 items-center justify-start p-3 w-full '>
                                     <div className='font-semibold' >

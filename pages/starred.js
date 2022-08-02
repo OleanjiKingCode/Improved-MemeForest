@@ -103,7 +103,6 @@ export default function Starred (props) {
             
             let data = props.members;
             const addresses = ['']
-            console.log(data)
             const tx = await Promise.all(data.map(async i => {
                 
                 addresses.push(i.Adddress)
@@ -111,9 +110,7 @@ export default function Starred (props) {
             }));
             const Address = person.toLowerCase()
             const isThere = addresses.includes(Address)
-            console.log(isThere)
             setAMember(isThere)
-            console.log(tx)
         } catch (e) {
             console.log(e)
             setAMember(false)
