@@ -76,7 +76,7 @@ export default function Home(props) {
       await join.wait()
       setLoading(false)
       setAMember(true)
-      await checkIfAMember(props);
+      checkIfAMember(props);
     } catch (w) {
       console.log(w)
     }
@@ -106,23 +106,22 @@ export default function Home(props) {
   
 const renderButton = () => {
 
-  if(!signer) {
-    return (
-      <div className='w-full h-full flex items-center justify-center '>
-         <ConnectButton />
-      </div>
+  // if(!signer) {
+  //   return (
+  //     <div className='w-full h-full flex items-center justify-center '>
 
-    )
-  }
+  //        <ConnectButton />
+  //     </div>
+
+  //   )
+  // }
 
   if(!AMember) {
     return (
-      <div className='flex items-center w-full h-full border border-slate-900 z-0'> 
-      <div className=' flex flex-col md:flex-row items-center w-full h-full '>
-          <div className='w-full basis-3/5 md:ml-4 mt-4 md:mt-0'>
-            01
-          </div>
-          <div className='flex flex-column items-center w-full basis-2/5 space-y-6 p-20 mr-4 mt-10'>
+      <div className='flex items-center w-full h-full  z-0'> 
+      <div className=' flex flex-col md:flex-row items-center md:justify-between w-full h-full '>
+          
+          <div className='flex flex-column items-center w-full basis-2/5 space-y-6 p-20 mr-4 ml-24 mt-10'>
               <div className='flex items-center text-3xl text-black font-bold'>
                 Welcome To NFT <span className='text-green-500'> Air </span>
               </div>
@@ -135,7 +134,7 @@ const renderButton = () => {
               <div className='flex flex-col items-center  justify-center w-full'>
                 {
                   loading ?
-                  <button className='text-lg text-gray-50  font-semibold w-full py-2 bg-white  rounded-xl '>
+                  <button className='text-lg text-gray-50 flex items-center justify-center font-semibold w-full py-2 bg-white  rounded-xl '>
                    <img src="/loader.png" alt="loading..." className='w-8 h-8 mt-2' />
                   </button>
                   :
@@ -151,6 +150,9 @@ const renderButton = () => {
                  <ConnectButton />
                 </div>
               </div>
+          </div>
+          <div className='w-full flex items-start justify-around basis-2/5 md:ml-4  md:mt-0'>
+            <img src='/main-removebg-preview.png' className='w-fit' />
           </div>
           </div>
       </div>
