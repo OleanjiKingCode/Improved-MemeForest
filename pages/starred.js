@@ -207,8 +207,11 @@ export default function Starred (props) {
          
       };
 
-      const gohome = () => {
+    const gohome = () => {
         router.push('/')
+    }
+    const feed = () => {
+        router.push('/Feed')
     }
     const create = () => {
         router.push('/create')
@@ -271,7 +274,7 @@ export default function Starred (props) {
             return(
                 <div className='flex flex-col ' >
                 <h3 className='text-center font-bold text-lg self-center'>
-                    YOUR STARRED MEMES
+                    YOUR STARRED NFTS ART(S)
                 </h3>
               
                 <div className='grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-4 px-5 py-2 ' >
@@ -280,11 +283,9 @@ export default function Starred (props) {
                             return(  
                                 <>
                                  {
-                                        (card.DidMemberStarMe == true)  &&
-                                
-                                <div key={i} className='w-full shadow-md p-3 rounded-3xl bg-gray-50 '>   
-                                   
-
+                                    (card.DidMemberStarMe == true) ? 
+                                     
+                                    <div key={i} className='w-full shadow-md p-3 rounded-3xl bg-gray-50 '>
                                         <div className='flex flex-col' >
                                         <div className='group flex flex-row items-center justify-center overflow-hidden rounded-lg '  >
                                             <a href={card.File} target='_blank' rel="noreferrer" >  
@@ -395,7 +396,20 @@ export default function Starred (props) {
                                         </div>
                                     </div>
                                     </div> 
-                                    }
+                                        :
+                                    <div className='absolute top-22 left-0  w-full bg-white flex flex-col items-center space-y-10'>
+                                        
+                                        <img src='/sad.png' className='w-1/6'/>
+                                        <h4 className='px-5 text-center'>
+                                            Sorry You Currently Have No Starred Nft Art(s)
+                                        </h4>
+                                        
+                                        <button onClick={feed} className='no-underline bg-green-500 py-2 px-3 rounded-lg font-bold text-teal-50 hover:bg-orange-500 cursor-pointer ' > 
+                                            Feed
+                                        </button>
+                        
+                                    </div> 
+                                }
                                 
                                 </>
                             )

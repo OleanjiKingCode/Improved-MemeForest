@@ -247,7 +247,7 @@ export default function Create (props) {
                     <div className='flex flex-col items-center justify-center  w-full'> 
                         
                             <h3 className='text-center font-bold text-lg self-center'>
-                               CREATE YOUR MEME AND SHOW THE WORLD
+                               CREATE YOUR NFT ART AND SHOW THE WORLD
                             </h3>
 
                         <div className='flex flex-col md:flex-row items-center justify-center py-2 w-4/5 space-y-8 md:space-x-8'>
