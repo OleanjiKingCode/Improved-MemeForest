@@ -183,7 +183,7 @@ const renderButton = () => {
                                     </div>
                                   </div>
                                   <div className='flex justify-between flex-col md:flex-row space-y-6 md:space-y-6 text-lg font-thin hover:cursor-pointer text-white  pt-2'>
-                                    <div className='flex items-end text-lg font-medium '>
+                                    <div className='flex items-end text-sm md:text-lg font-medium '>
                                         {lists.Adddress}
                                     </div>
                                     <div className='flex flex-col text-lg  '>
