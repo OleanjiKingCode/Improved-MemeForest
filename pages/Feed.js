@@ -14,7 +14,7 @@ import { Web3Storage } from 'web3.storage'
 const MemesQuery= `
 query {
     memes(
-    orderBy : Date ,
+    orderBy : id,
     orderDirection: desc
         ) 
     {
@@ -301,13 +301,17 @@ export default function Feed (props) {
     
                                                          }
                                                             {
-                                                                card.IsDownloadable &&
+                                                                card.IsDownloadable ?
                                                                 <div className='row-start-2 row-span-2 flex items-center justify-center rounded-lg shadow-md py-2 hover:shadow-xl transition ease ' >
                                                                     <a href={`https://${card.image}.ipfs.dweb.link/image`} download target='_blank' rel="noreferrer" onClick={(e) =>download(card.image,card.Name)}>  
                                                                     <img src='./arrow.png' alt='' className='h-5 w-5 mt-1' />
                                                                     </a>
                                                            
                                                                  </div>
+                                                                 :
+                                                                 <div className='row-start-2 h-10 row-span-2 flex items-center justify-center rounded-lg py-2 ' >
+                                                                
+                                                                </div>
                                                             }
                                                             
                                                         </div>

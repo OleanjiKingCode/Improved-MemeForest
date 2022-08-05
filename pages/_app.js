@@ -49,12 +49,6 @@ function MyApp({ Component, pageProps }) {
      
       <WagmiProvider client={wagmiClient}>
       <RainbowKitProvider 
-    //   theme={darkTheme({
-    //   accentColor: '#22c55e',
-    //   accentColorForeground: 'white',
-    //   borderRadius: 'large',
-    //   fontStack: 'system'
-    // })} 
     chains={chains}>
       <div className=''>
       {

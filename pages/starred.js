@@ -1,5 +1,4 @@
 import Head from 'next/head'
-import Web3Modal from "web3modal";
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useContract, useProvider,useSigner,useAccount,useBalance,useConnect  } from 'wagmi'
 import {MemeForestAddress,Token, ApiUriv} from '../constant'
@@ -9,13 +8,12 @@ import axios from "axios"
 import { createClient } from 'urql'
 import { Web3Storage } from 'web3.storage'
 import { useRouter } from 'next/router';
-import { Audio, TailSpin} from  'react-loader-spinner'
 
     
 const MemesQuery= `
 query {
     memes(
-    orderBy : Date ,
+    orderBy : id,
     orderDirection: desc
         ) 
     {
@@ -51,19 +49,13 @@ const client = createClient({
 })    
     
     
-export default function Starred (props) {   
-    const Memeslength  = props.memes.length
-    const Memberslength  = props.members.length
+export default function Starred (props) {  
     const { data} = useAccount()
     const person = data?.address;
     const[loadingStarId, setLoadingStarId] = useState(0)
-    const [addressinquery,Addressfromquery] = useState([])
     const[loadingStar, setLoadingStar] = useState(false)
     const[DidIStarMeme, SetDidIStarMeme] =useState(false)
-    const[DidILikeMeme, SetDidILikeMeme] =useState(false)
-    const [starredMemes,setStarredMemes] = useState([])
     const [AMember,setAMember] = useState(false)
-    const[loading, setLoading] = useState(false)
     const[memeDetails,setMemeDetails] = useState([])
     const[loadingpage,setLoadingPage] = useState(false)
     const provider = useProvider()
@@ -346,13 +338,17 @@ export default function Starred (props) {
 
                                              }
                                                 {
-                                                    card.IsDownloadable &&
+                                                    card.IsDownloadable ?
                                                     <div className='row-start-2 row-span-2 flex items-center justify-center rounded-lg shadow-md py-2 hover:shadow-xl transition ease ' >
                                                         <a href={`https://${card.image}.ipfs.dweb.link/image`} download target='_blank' rel="noreferrer" onClick={(e) =>download(card.image,card.Name)}>  
                                                         <img src='./arrow.png' alt='' className='h-5 w-5 mt-1' />
                                                         </a>
                                                
                                                      </div>
+                                                     :
+                                                     <div className='row-start-2 h-10 row-span-2 flex items-center justify-center rounded-lg py-2 ' >
+                                                     
+                                                    </div>
                                                 }
                                                 
                                             </div>
@@ -408,9 +404,9 @@ export default function Starred (props) {
                 </div>
                 <div className='flex items-center justify-center space-x-3 py-3 w-full '>      
                     <img src='/sad.png' className='w-[40px]'/>
-                    <h4 className='px-5 text-center'>
+                    <div className='px-5 text-center text-sm'>
                         Thats all of your Starred Nft Art(s)
-                    </h4> 
+                    </div> 
                 </div> 
                 </div>
             )

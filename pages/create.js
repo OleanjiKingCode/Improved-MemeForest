@@ -41,7 +41,6 @@ export default function Create (props) {
     const[IsDownloadable, SetIsDownloadable] = useState(false)
     const[loadingpage,setLoadingPage] = useState(false)
     const[valueExtension, setValueExtension] = useState("")
-    const provider = useProvider()
     const [numberOfLoading, setNumberOfLoading] = useState(3)
     const { data: signer, isError, isLoading } = useSigner()
     const contractWithSigner = useContract({
@@ -49,13 +48,6 @@ export default function Create (props) {
         contractInterface: MEME.abi,
         signerOrProvider: signer,
     })
-
-    const contractWithProvider = useContract({
-        addressOrName: MemeForestAddress,
-        contractInterface: MEME.abi,
-        signerOrProvider: provider,
-    })
-    const counter = 1;
     const router = useRouter()
     useEffect(() => {
         PageLoad()
@@ -98,10 +90,8 @@ export default function Create (props) {
         
          
             let time = new Date().toLocaleString();
-            let downloadable;
-            IsDownloadable ?  downloadable = true : downloadable = false ;
             
-            const create = await contractWithSigner.CreateMemeItems(memeInfo,person,time,valueExt,downloadable)
+            const create = await contractWithSigner.CreateMemeItems(memeInfo,person,time,valueExt,IsDownloadable)
             setNumberOfLoading(1)
             await create.wait()
             setLoading(false)
@@ -203,6 +193,10 @@ export default function Create (props) {
         }
         
     }
+    const checkbox = () => {
+        let value = IsDownloadable;
+        SetIsDownloadable (!value)
+    }
     const renderButton = () =>{
         if(!AMember){
             return (
@@ -286,7 +280,7 @@ export default function Create (props) {
                                             )
                                             :
                                             (
-                                                // <video src={viewing} width="500px" height="500px"   controls="controls"/> 
+                                              
                                                 <video src={viewing} width="500px" height="500px" /> 
                 
                                             )
@@ -304,7 +298,7 @@ export default function Create (props) {
                                     </div>
                                     <input
                                     type='checkbox'
-                                     onChange={e => SetIsDownloadable(e.target.value) }
+                                     onChange={() => checkbox() }
                                      />
                                      
                                 </div>

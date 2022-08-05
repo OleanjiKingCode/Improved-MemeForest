@@ -86,7 +86,6 @@ export default function Home(props) {
         
         let data = props.members;
         const addresses = ['']
-        console.log(data)
         const tx = await Promise.all(data.map(async i => {
             
             addresses.push(i.Adddress)
@@ -105,16 +104,6 @@ export default function Home(props) {
 
   
 const renderButton = () => {
-
-  // if(!signer) {
-  //   return (
-  //     <div className='w-full h-full flex items-center justify-center '>
-
-  //        <ConnectButton />
-  //     </div>
-
-  //   )
-  // }
 
   if(!AMember) {
     return (

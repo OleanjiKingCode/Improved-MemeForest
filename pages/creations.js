@@ -14,7 +14,7 @@ import { Web3Storage } from 'web3.storage'
 const MemesQuery= `
 query {
     memes(
-    orderBy : Date ,
+    orderBy : id,
     orderDirection: desc
         ) 
     {
@@ -206,10 +206,6 @@ export default function Feed (props) {
         setMemberDetails(tx);
     }
     const renderButton = () => {
-        
-        // console.log(memberDetails[1].Owner);
-       
-
         if(Memeslength == 0) {
             return (
                 <div className='flex flex-row items-center justify-center' >
@@ -321,13 +317,20 @@ export default function Feed (props) {
     
                                                          }
                                                             {
-                                                                card.IsDownloadable &&
+                                                                card.IsDownloadable ?
+
                                                                 <div className='row-start-2 row-span-2 flex items-center justify-center rounded-lg shadow-md py-2 hover:shadow-xl transition ease ' >
                                                                     <a href={`https://${card.image}.ipfs.dweb.link/image`} download target='_blank' rel="noreferrer" onClick={(e) =>download(card.image,card.Name)}>  
                                                                     <img src='./arrow.png' alt='' className='h-5 w-5 mt-1' />
                                                                     </a>
                                                            
                                                                  </div>
+                                                                 :
+                                                                 <div className='row-start-2 h-10 row-span-2 flex items-center justify-center rounded-lg py-2 ' >
+                                                                 
+                                                                 
+                                                        
+                                                                </div>
                                                             }
                                                             
                                                         </div>
@@ -413,11 +416,11 @@ export default function Feed (props) {
 
                         
                     </div>
-                    <div className='flex items-center justify-center space-x-2 w-full py-4'>      
+                    <div className='flex items-center justify-center w-full py-4'>      
                             <img src='/sad.png' className='w-[40px]'/>
-                            <h4 className='px-5 text-center'>
+                            <div className='px-5 text-center text-sm'>
                             Thats all of your Created Nft Art(s)
-                            </h4> 
+                            </div> 
                         </div>     
                     </div>
                     )
