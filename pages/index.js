@@ -110,9 +110,9 @@ const renderButton = () => {
       <div className='flex items-center w-full h-full  z-0'> 
       <div className=' flex flex-col-reverse md:flex-row items-center md:justify-between w-full h-full '>
           
-          <div className='flex flex-column items-center w-full basis-2/5 space-y-6 p-20 mr-4 ml-24 mt-10'>
-              <div className='flex items-center text-3xl text-black font-bold'>
-                Welcome To NFT <span className='text-green-500'> Air </span>
+          <div className='flex flex-column items-center w-full basis-2/5 space-y-6 p-20 mr-4  mt-10'>
+              <div className='flex items-center text-3xl text-center text-black font-bold'>
+                <span>Welcome To NFT <span className='text-green-500'> Air </span> </span>
               </div>
               <div className='text-sm text-gray-400'>
                 Register to become a Member
@@ -140,7 +140,7 @@ const renderButton = () => {
                 </div>
               </div>
           </div>
-          <div className='w-full flex items-center justify-around basis-2/5 md:ml-4  md:mt-0'>
+          <div className='w-full flex items-center justify-center md:justify-around basis-2/5 md:ml-4  md:mt-0'>
             <img src='/main-removebg-preview.png' className='w-fit' />
           </div>
           </div>
@@ -153,7 +153,7 @@ const renderButton = () => {
   if (AMember) {
     return(
       <div>
-          <div className='text-lg font-semibold'>
+          <div className='text-lg font-semibold w-full'>
             {
               props.members.map((lists,i) => {
                 
