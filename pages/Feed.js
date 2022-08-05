@@ -315,7 +315,7 @@ export default function Feed (props) {
                                                         <div className='rounded-md mt-3 text-sm h-auto ' >
                                                             {card.Description} 
                                                         </div>
-                                                        <div className='flex flex-row  justify-between'>
+                                                        <div className='flex flex-row  justify-between space-x-1'>
                                                             <button className='rounded-md border-2 border-black flex mt-3  items-center justify-around h-8 w-24 hover:bg-[#FFFF00] 'onClick={() => StarMeme(card.Id, card.DidMemberStarMe)}>
                                                                 
                                                                 {

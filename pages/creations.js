@@ -57,6 +57,7 @@ export default function Feed (props) {
     const person = data?.address;
     const [Address, setAddress] = useState("")
     const [memes,setMemes] = useState([])
+    const [aCreator, setIsACreator] = useState(false)
     const[loadingStar, setLoadingStar] = useState(false)
     const[memberDetails,setMemberDetails] = useState([])
     const[loadingLike, setLoadingLike] = useState(false)
@@ -206,7 +207,8 @@ export default function Feed (props) {
     }
     const renderButton = () => {
         
-
+        // console.log(memberDetails[1].Owner);
+       
 
         if(Memeslength == 0) {
             return (
@@ -253,10 +255,26 @@ export default function Feed (props) {
                         {
                             memberDetails.map((card,i) => {
                                 return(  
+                                    <>
+                                    <div className='absolute top-22 left-0  w-full bg-white flex flex-col items-center space-y-10'>
+                                            
+                                            <img src='/sad.png' className='w-1/6'/>
+                                            <h4 className='px-5 text-center'>
+                                                Sorry You Currently Have No Created Nft Art(s)
+                                            </h4>
+                                            
+                                            <button onClick={create} className=' py-10 no-underline bg-green-500  px-3 rounded-lg font-bold text-teal-50 hover:bg-orange-500 cursor-pointer ' > 
+                                                Create
+                                            </button>
+                            
+                                        </div>
                                     <div key={i} >
                                         {
                                             
-                                             (card.Owner == Address) ?
+                                             (card.Owner == Address) &&
+                                             <div>
+                                            {/*   */}
+                                             <div className='absolute bg-white '>
                                              <div className='w-full shadow-md p-3 rounded-3xl bg-gray-50 '>
                                               <div className='flex flex-col' >
                                                     <div className='group flex flex-row items-center justify-center overflow-hidden rounded-lg '  >
@@ -330,7 +348,7 @@ export default function Feed (props) {
                                                         <div className='rounded-md mt-3 text-sm h-auto ' >
                                                             {card.Description} 
                                                         </div>
-                                                        <div className='flex flex-row  justify-between'>
+                                                        <div className='flex flex-row  justify-between space-x-1'>
                                                             <button className='rounded-md border-2 border-black flex mt-3  items-center justify-around h-8 w-24 hover:bg-[#FFFF00] 'onClick={() => StarMeme(card.Id, card.DidMemberStarMe)}>
                                                                 
                                                                 {
@@ -399,23 +417,11 @@ export default function Feed (props) {
                                                     </div>
                                                 </div>
                                            </div>
-                                           :
-                                           <div>
-                                                <div className='absolute top-22 left-0  w-full bg-white flex flex-col items-center space-y-10'>
-                                            
-                                                    <img src='/sad.png' className='w-1/6'/>
-                                                    <h4 className='px-5 text-center'>
-                                                        Sorry You Currently Have No Starred Nft Art(s)
-                                                    </h4>
-                                                    
-                                                    <button onClick={create} className='no-underline bg-green-500 py-2 px-3 rounded-lg font-bold text-teal-50 hover:bg-orange-500 cursor-pointer ' > 
-                                                        Create
-                                                    </button>
-                                    
-                                                </div> 
+                                           </div>
                                            </div>
                                         }
                                     </div>
+                                    </>
                                 )
                             })
                         }

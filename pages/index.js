@@ -119,7 +119,7 @@ const renderButton = () => {
   if(!AMember) {
     return (
       <div className='flex items-center w-full h-full  z-0'> 
-      <div className=' flex flex-col md:flex-row items-center md:justify-between w-full h-full '>
+      <div className=' flex flex-col-reverse md:flex-row items-center md:justify-between w-full h-full '>
           
           <div className='flex flex-column items-center w-full basis-2/5 space-y-6 p-20 mr-4 ml-24 mt-10'>
               <div className='flex items-center text-3xl text-black font-bold'>
@@ -151,7 +151,7 @@ const renderButton = () => {
                 </div>
               </div>
           </div>
-          <div className='w-full flex items-start justify-around basis-2/5 md:ml-4  md:mt-0'>
+          <div className='w-full flex items-center justify-around basis-2/5 md:ml-4  md:mt-0'>
             <img src='/main-removebg-preview.png' className='w-fit' />
           </div>
           </div>
