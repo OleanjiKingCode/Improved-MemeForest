@@ -230,10 +230,11 @@ export default function Starred (props) {
                     ) 
                     : 
                     (
-                        <div className='flex flex-col items-center justify-center '> 
+                        <div className='flex flex-col items-center justify-center space-y-5 '> 
                             <div className='text-center font-bold text-lg '>
                                 Go Back Home and Register before Seeing Starred Memes 
                             </div>
+                            <img src='/sad.png' className='w-1/6'/>  
                             <button onClick={gohome} className='no-underline bg-green-500 py-2 px-3 rounded-lg font-bold text-teal-50 hover:bg-orange-500 cursor-pointer ' > 
                                 Home
                             </button>
@@ -257,10 +258,11 @@ export default function Starred (props) {
                     ) 
                     : 
                     (
-                        <div className='flex flex-col items-center justify-center ' > 
+                        <div className='flex flex-col items-center justify-center space-y-5 ' > 
                             <div className='text-center font-bold text-lg '>
                                 You have No Starred Memes Go back to Create Memes 
                             </div>
+                            <img src='/sad.png' className='w-1/6'/>  
                             <button onClick={create} className='no-underline bg-green-500 py-2 px-3 rounded-lg font-bold text-teal-50 hover:bg-orange-500 cursor-pointer '> 
                                 Create Meme
                             </button>
@@ -283,7 +285,7 @@ export default function Starred (props) {
                             return(  
                                 <>
                                  {
-                                    (card.DidMemberStarMe == true) ? 
+                                    (card.DidMemberStarMe == true)&& 
                                      
                                     <div key={i} className='w-full shadow-md p-3 rounded-3xl bg-gray-50 '>
                                         <div className='flex flex-col' >
@@ -396,19 +398,7 @@ export default function Starred (props) {
                                         </div>
                                     </div>
                                     </div> 
-                                        :
-                                    <div className='absolute top-22 left-0  w-full bg-white flex flex-col items-center space-y-10'>
                                         
-                                        <img src='/sad.png' className='w-1/6'/>
-                                        <h4 className='px-5 text-center'>
-                                            Sorry You Currently Have No Starred Nft Art(s)
-                                        </h4>
-                                        
-                                        <button onClick={feed} className='no-underline bg-green-500 py-2 px-3 rounded-lg font-bold text-teal-50 hover:bg-orange-500 cursor-pointer ' > 
-                                            Feed
-                                        </button>
-                        
-                                    </div> 
                                 }
                                 
                                 </>
@@ -416,6 +406,12 @@ export default function Starred (props) {
                         })
                     }
                 </div>
+                <div className='flex items-center justify-center space-x-3 py-3 w-full '>      
+                    <img src='/sad.png' className='w-[40px]'/>
+                    <h4 className='px-5 text-center'>
+                        Thats all of your Starred Nft Art(s)
+                    </h4> 
+                </div> 
                 </div>
             )
            }

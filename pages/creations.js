@@ -224,9 +224,12 @@ export default function Feed (props) {
                         ) 
                         : 
                         (
-                            <h4 className='text-center'>
+                           <>
+                            <img src='/sad.png' className='w-1/6'/>
+                            <h4>
                                 There are no Memes For Display
                             </h4>
+                            </>
                         )
                     }
                 </div>
@@ -256,25 +259,9 @@ export default function Feed (props) {
                             memberDetails.map((card,i) => {
                                 return(  
                                     <>
-                                    <div className='absolute top-22 left-0  w-full bg-white flex flex-col items-center space-y-10'>
-                                            
-                                            <img src='/sad.png' className='w-1/6'/>
-                                            <h4 className='px-5 text-center'>
-                                                Sorry You Currently Have No Created Nft Art(s)
-                                            </h4>
-                                            
-                                            <button onClick={create} className=' py-10 no-underline bg-green-500  px-3 rounded-lg font-bold text-teal-50 hover:bg-orange-500 cursor-pointer ' > 
-                                                Create
-                                            </button>
-                            
-                                        </div>
                                     <div key={i} >
                                         {
-                                            
                                              (card.Owner == Address) &&
-                                             <div>
-                                            {/*   */}
-                                             <div className='absolute bg-white '>
                                              <div className='w-full shadow-md p-3 rounded-3xl bg-gray-50 '>
                                               <div className='flex flex-col' >
                                                     <div className='group flex flex-row items-center justify-center overflow-hidden rounded-lg '  >
@@ -417,15 +404,21 @@ export default function Feed (props) {
                                                     </div>
                                                 </div>
                                            </div>
-                                           </div>
-                                           </div>
                                         }
                                     </div>
                                     </>
                                 )
                             })
                         }
+
+                        
                     </div>
+                    <div className='flex items-center justify-center space-x-2 w-full py-4'>      
+                            <img src='/sad.png' className='w-[40px]'/>
+                            <h4 className='px-5 text-center'>
+                            Thats all of your Created Nft Art(s)
+                            </h4> 
+                        </div>     
                     </div>
                     )
                 }
