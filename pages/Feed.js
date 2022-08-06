@@ -169,8 +169,8 @@ export default function Feed (props) {
                 return;
             }
            
-                const StarAnswer= await contractWithProvider.WhatDidIStar(i.id,person);
-                const LikeAnswer= await contractWithProvider.WhatDidILike(i.id,person);
+                const StarAnswer= signer ? await contractWithProvider.WhatDidIStar(i.id,person) : false;
+                const LikeAnswer= signer ? await contractWithProvider.WhatDidILike(i.id,person) : false;
                 
                 
             let files = await res.files()
