@@ -6,7 +6,6 @@ import {
   configureChains,
   getDefaultWallets,
   RainbowKitProvider,
-  darkTheme 
 } from '@rainbow-me/rainbowkit';
 import 'bootstrap/dist/css/bootstrap.css'
 import { chain, createClient, WagmiProvider } from 'wagmi';

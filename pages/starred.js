@@ -2,7 +2,7 @@ import Head from 'next/head'
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useContract, useProvider,useSigner,useAccount,useBalance,useConnect  } from 'wagmi'
 import {MemeForestAddress,Token, ApiUriv} from '../constant'
-import { useEffect, useRef, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import MEME from '../artifacts/contracts/MemeForest.sol/MemeForest.json'
 import axios from "axios"
 import { createClient } from 'urql'
@@ -201,9 +201,6 @@ export default function Starred (props) {
 
     const gohome = () => {
         router.push('/')
-    }
-    const feed = () => {
-        router.push('/Feed')
     }
     const create = () => {
         router.push('/create')

@@ -1,29 +1,31 @@
-# MemeForest 
+# MemeForest V2 (Improved )  => NFT AIR
 
-This project is somewhat a social media platform for memes using these web3 technologies:
+This Dapp project is somewhat like opensea but here we uplaod our art forppl to view and share our work and i built this with these web3 technologies:
 --> Rainbow [WAGMI Client]  : for wallet connection 
---> Arweave & Bundlr : for keeping the data of the meme
+--> web3 stirage  for keeping the data of the nft art(s)
 --> Next JS : frontend
 --> Solidity : Backend
 --> Hardhat
+--> Ankr
+--> Mumbai Testnet
 
 
-I wanted to make a Dapp using these technologies and add to my portfolio then i decided to make a platform where members can add memes for safe keeping, star memes to make it easier to find memes, like them to appreciate the meme, download them to get them on your device.
+To get this project you can run the following:
 
-# Pages in MemeForest
+    - git clone <link to this repo>
 
---> Home :  where to register as a memeber
-            To view your number of uploads, starred memes & joined date and time
+the above colnes my project for you 
 
---> Feed : Here all the memes can be seen in accordance to the date they were uploaded, which can 
-            be viewed( creator and date ) and interacted with like starring and liking.
---> Starred : Where the member sees the memes they starred  thry can also unstar it to remove
-             it the starred section.
---> Creations : Here are all the creations of the member 
---> Funds : As to upload data onto the Arweave using webbundlr we need some underlying amount that would be
-            charged on upload of memes. So this Funds section allows user to imburse thier account and also withdraw their funds.
+Then to install all the dependencies used you run 
 
---> About : This is about the project and explanantion on it and a little about myself.
+    - yarn 
+OR 
+
+    - npm install 
+
+Then you can make a branch in this repo and make alterations as you like as this project is open source.
+
+Then you can make a pull request for your changes.
 
 
 

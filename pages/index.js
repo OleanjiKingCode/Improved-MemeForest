@@ -1,10 +1,8 @@
 import Head from 'next/head'
-import Image from 'next/image'
-import Web3Modal from "web3modal";
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useContract, useProvider,useSigner,useAccount,useBalance,useConnect  } from 'wagmi'
 import {MemeForestAddress,ApiUriv} from '../constant'
-import { useEffect, useRef, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import MEME from '../artifacts/contracts/MemeForest.sol/MemeForest.json'
 import { createClient } from 'urql'
 
@@ -28,7 +26,6 @@ const client = createClient({
 
 
 export default function Home(props) {
-  const array = props.members
   const { data} = useAccount()
   const person = data?.address;
   const [name, setName] = useState("")

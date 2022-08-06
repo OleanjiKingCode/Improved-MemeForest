@@ -2,7 +2,7 @@ import Head from 'next/head'
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useContract, useProvider,useSigner,useAccount  } from 'wagmi'
 import {MemeForestAddress, Token, ApiUriv} from '../constant'
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import MEME from '../artifacts/contracts/MemeForest.sol/MemeForest.json'
 import { createClient } from 'urql'
 import { useRouter } from 'next/router';

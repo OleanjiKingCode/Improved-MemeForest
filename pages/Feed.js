@@ -52,10 +52,8 @@ const client = createClient({
 
 export default function Feed (props) {
     const Memeslength  = props.memes.length
-    const Memberslength  = props.members.length
     const { data} = useAccount()
     const person = data?.address;
-    const [memes,setMemes] = useState([])
     const[loadingStar, setLoadingStar] = useState(false)
     const[memberDetails,setMemberDetails] = useState([])
     const[loadingLike, setLoadingLike] = useState(false)

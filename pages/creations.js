@@ -327,9 +327,6 @@ export default function Feed (props) {
                                                                  </div>
                                                                  :
                                                                  <div className='row-start-2 h-10 row-span-2 flex items-center justify-center rounded-lg py-2 ' >
-                                                                 
-                                                                 
-                                                        
                                                                 </div>
                                                             }
                                                             
@@ -370,14 +367,13 @@ export default function Feed (props) {
                                                                     )
                                                                 }
                                                             </button>
-                                                           <button className='rounded-md border-2 border-black flex mt-3  items-center justify-around h-8 w-24 hover:bg-[#ff0000] '  onClick={() => LikeMeme(card.Id, card.DidMemberLikeMe)}
-                                                               >
-                                                                    {
+                                                           <button className='rounded-md border-2 border-black flex mt-3  items-center justify-around h-8 w-24 hover:bg-[#ff0000] '  onClick={() => LikeMeme(card.Id, card.DidMemberLikeMe)} >
+                                                                {
                                                                     ((loadingLikeId == card.Id) && loadingLike) ?
                                                                     (
                                                                         <button className='rounded-md border-2 border-black flex  items-center justify-around h-8 w-24 bg-[#FFFF00] ' >
                                                                             <h4>
-                                                                            <img src='./filledStar.png' alt='STAR'  className='w-5 h-5'  />
+                                                                                <img src='./filledStar.png' alt='STAR'  className='w-5 h-5'  />
                                                                             </h4>
                                                                         </button>
                                                                     ) 
