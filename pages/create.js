@@ -214,6 +214,7 @@ export default function Create (props) {
                             <div className='text-center font-bold text-lg '>
                                 Go Back Home and Register before Uploading Memes 
                             </div>
+                            <img src='/sad.png' className='w-1/6'/>  
                             <button onClick={gohome} className='no-underline bg-green-500 py-2 px-3 rounded-lg font-bold text-teal-50 hover:bg-orange-500 cursor-pointer ' > 
                                 Home
                             </button>
