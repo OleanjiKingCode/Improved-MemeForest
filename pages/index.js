@@ -43,26 +43,10 @@ export default function Home(props) {
     signerOrProvider: signer,
   });
 
-  const contractWithProvider = useContract({
-    addressOrName: MemeForestAddress,
-    contractInterface: MEME.abi,
-    signerOrProvider: provider,
-  });
   useEffect(() => {
-    PageLoad();
     checkIfAMember(props);
   }, []);
 
-  const PageLoad = async () => {
-    try {
-      setLoadingPage(true);
-      const delay = (ms) => new Promise((res) => setTimeout(res, ms));
-      await delay(7000);
-      setLoadingPage(false);
-    } catch (e) {
-      console.log(e);
-    }
-  };
   const joinMembership = async () => {
     try {
       setLoading(true);
@@ -104,7 +88,7 @@ export default function Home(props) {
       return (
         <div className="flex items-center w-full h-full  z-0">
           <div className=" flex flex-col-reverse md:flex-row items-center md:justify-between w-full h-full ">
-            <div className="flex flex-column items-center w-full basis-2/5 space-y-6 p-20 mr-4  mt-10">
+            <div className="flex flex-col items-center w-full basis-2/5 space-y-6 p-20 mr-4  mt-10">
               <div className="flex items-center text-3xl text-center text-black font-bold">
                 <span>
                   Welcome To NFT <span className="text-green-500"> Air </span>{" "}
