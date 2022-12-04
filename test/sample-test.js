@@ -2,22 +2,7 @@ const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
 describe("Greeter", function () {
-  it("Should return the new greeting once it's changed", async function () {
-    const Greeter = await ethers.getContractFactory("Greeter");
-    const greeter = await Greeter.deploy("Hello, world!");
-    await greeter.deployed();
-
-    expect(await greeter.greet()).to.equal("Hello, world!");
-
-    const setGreetingTx = await greeter.setGreeting("Hola, mundo!");
-
-    // wait until the transaction is mined
-    await setGreetingTx.wait();
-
-    expect(await greeter.greet()).to.equal("Hola, mundo!");
-  });
-
-  it("Should create two members,ceate two means,like one,star one,fetch all, fetch starred and fetch mine " , async function () {
+  it("Should create two members,ceate two nft,like one,star one,fetch all, fetch starred and fetch mine " , async function () {
     const Meme = await ethers.getContractFactory("MemeForest");
     const meme = await Meme.deploy();
     await meme.deployed();
@@ -34,10 +19,8 @@ describe("Greeter", function () {
     const fectme = await meme.GetMemberByAddr(addr);
     console.log(fectme);
     let another = new Date().toISOString().slice(0, 10);
-    // {http://arweave.net/31TaDv7KQHVUBpExX4G5KljQ2Hut4i1qKqDomBIk0ko}
-    // http://arweave.net/whJBX4UfrR-b6D8U7N7asbXeh3oYZW100AQpBaOtqbs
-    await meme.connect(buyerAddress).CreateMemeItems("http://arweave.net/31TaDv7KQHVUBpExX4G5KljQ2Hut4i1qKqDomBIk0ko",addr,another);
-    await meme.connect(thirdone).CreateMemeItems("http://arweave.net/whJBX4UfrR-b6D8U7N7asbXeh3oYZW100AQpBaOtqbs",addr2,another);
+    await meme.connect(buyerAddress).CreateMemeItems("MemeLinkInfo1",addr,another,"jpeg",true);
+    await meme.connect(thirdone).CreateMemeItems("MemeLinkInfo2",addr2,another,"mp4",false);
 
     const Allmeme = await meme.fetchAllMemes()
     console.log(Allmeme)

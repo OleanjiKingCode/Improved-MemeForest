@@ -4,7 +4,6 @@ pragma solidity ^0.8.7;
 import "hardhat/console.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
-import "hardhat/console.sol";
 
 contract MemeForest is ReentrancyGuard{
     using Counters for Counters.Counter;
@@ -21,11 +20,6 @@ contract MemeForest is ReentrancyGuard{
         string Datejoined;
     }
 
-    mapping(uint => MemeMembers) private IdMembers;
-    mapping(address => bool) private alreadyAMember;
-    mapping(address => mapping(uint => bool )) private DidyouStar;
-    mapping(address => mapping(uint => bool )) private DidyouLike;
-
     struct MemeFiles {
         string Memeinfo;
         address Owner;
@@ -36,13 +30,16 @@ contract MemeForest is ReentrancyGuard{
         string DateOfCreation;
         string FileType;
         bool IsDownloadable;
-      
     }
 
+    mapping(uint => MemeMembers) private IdMembers;
+    mapping(address => bool) private alreadyAMember;
+    mapping(address => mapping(uint => bool )) private DidyouStar;
+    mapping(address => mapping(uint => bool )) private DidyouLike;
     mapping (uint => MemeFiles) private IdMemeFiles;
     mapping(uint => address) private StarredMemeFiles;
 
-     uint public NumberOfUploads;
+    uint public NumberOfUploads;
 
     event Memberjoined (
         uint256 MemberId,
@@ -53,7 +50,7 @@ contract MemeForest is ReentrancyGuard{
         uint256 MemberStarredMemes,
         uint256 MemberDeletedMemes,
         uint256 MemberTotalLikes
-    ) ;
+    );
 
     event CreateMeme (
         uint256 MemeId,
@@ -155,7 +152,6 @@ contract MemeForest is ReentrancyGuard{
             }
         }
         return foundMember;
-
     }
 
 
@@ -209,7 +205,6 @@ contract MemeForest is ReentrancyGuard{
             currentNum,
             newMemes
         );
-
     }
 
 
@@ -226,8 +221,6 @@ contract MemeForest is ReentrancyGuard{
 
             memes[currentIndex - 1] = memeFiles;
             currentIndex-=1;
-
-            
         }
         return memes;
     }
@@ -249,7 +242,6 @@ contract MemeForest is ReentrancyGuard{
         for (uint index = 0; index < currentMemberNum; index++) {
             if(msg.sender == IdMembers[index+1].MemeberAddress){
                 currentNum = IdMembers[index+1].MyId;
-    
             }
         }
     
@@ -260,6 +252,7 @@ contract MemeForest is ReentrancyGuard{
             msg.sender
         );
     }
+
     function UnLikeMeme(uint _id) public {
         uint currentMemeNum = NumOfAllMemes.current();
         uint currentMemberNum = NumOfAllMembers.current();
@@ -271,15 +264,12 @@ contract MemeForest is ReentrancyGuard{
                newLikes = IdMemeFiles[i+1].Likes;
                 newLikes -=1;
                 IdMemeFiles[i+1].Likes =  newLikes;
-                  DidyouLike[msg.sender][_id]= false;
-                
-               
+                DidyouLike[msg.sender][_id]= false;
             }
         }
         for (uint index = 0; index < currentMemberNum; index++) {
             if(msg.sender == IdMembers[index+1].MemeberAddress){
                 currentNum = IdMembers[index+1].MyId;
-    
             }
         }
     
@@ -308,10 +298,7 @@ contract MemeForest is ReentrancyGuard{
                 newstars=IdMemeFiles[_id].Stars;
                 newstars+=1;
                 IdMemeFiles[_id].Stars = newstars ;
-                DidyouStar[msg.sender][_id]= true;
-               
-                
-               
+                DidyouStar[msg.sender][_id]= true; 
             }
         }
         for (uint index = 0; index < currentMemberNum; index++) {
@@ -327,7 +314,8 @@ contract MemeForest is ReentrancyGuard{
         newstars, 
         currentNum,
         msg.sender,
-        newstarredMemes );
+        newstarredMemes
+        );
     }
 
     
@@ -344,7 +332,6 @@ contract MemeForest is ReentrancyGuard{
                 newstars-=1;
                 IdMemeFiles[_id].Stars = newstars ;
                 DidyouStar[msg.sender][_id]= false;
-               
             }
         }
          for (uint index = 0; index < currentMemberNum; index++) {
@@ -381,58 +368,42 @@ contract MemeForest is ReentrancyGuard{
       
         uint currentMemeNum = NumOfAllMemes.current();
         MemeFiles[] memory memes  = new MemeFiles[] (currentNum);
-                
         uint currentIndex = 0;
         for (uint index = 0; index < currentMemeNum; index++) {
             uint id = IdMemeFiles[index+1].fileId;
-            
-            if(DidyouStar[sender][id] == true && IdMemeFiles[id].starred == true ){
-                
-            MemeFiles storage memeFiles = IdMemeFiles[id];
-            memes[currentIndex] = memeFiles;
-            currentIndex+=1;
-              
+            if(DidyouStar[sender][id] == true && IdMemeFiles[id].starred == true ){   
+                MemeFiles storage memeFiles = IdMemeFiles[id];
+                memes[currentIndex] = memeFiles;
+                currentIndex+=1;
             }
-             
-        }     
-         
-        return memes;
-         
+        }   
+        return memes; 
     }
 
     function fetchMyMeme(address sender) public view returns (MemeFiles[] memory) {
-       
-       
-         uint currentMemberNum = NumOfAllMembers.current();
+        uint currentMemberNum = NumOfAllMembers.current();
         uint currentNum;
         for (uint i = 0; i < currentMemberNum; i++) {
             if(sender == IdMembers[i+1].MemeberAddress){
-                 uint val = IdMembers[i+1].MyId;
+                uint val = IdMembers[i+1].MyId;
                 currentNum = IdMembers[val].MyMemes;
-                 console.log(val);
-                 
+                console.log(val);
             }
         }
         
-    
-
-
-     uint currentMemeNum = NumOfAllMemes.current();
+        uint currentMemeNum = NumOfAllMemes.current();
         uint currentIndex = 0;
         MemeFiles[] memory memes = new MemeFiles[] (currentNum);
          for (uint i = 0; i < currentMemeNum; i++) {
-             uint id = IdMemeFiles[i+1].fileId;
-             if(sender ==  IdMemeFiles[id].Owner  ){
-                 
-            MemeFiles storage memeFiles = IdMemeFiles[id];
-             
-            memes[currentIndex] = memeFiles;
-            currentIndex+=1;
-             }
+            uint id = IdMemeFiles[i+1].fileId;
+            if(sender ==  IdMemeFiles[id].Owner  ){ 
+                MemeFiles storage memeFiles = IdMemeFiles[id];
+                memes[currentIndex] = memeFiles;
+                currentIndex+=1;
+            }
          }
          return memes;
     }
 
- 
 } 
 
