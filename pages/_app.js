@@ -1,5 +1,4 @@
 import '../styles/globals.css'
-import 'bootstrap/dist/css/bootstrap.css'
 import '@rainbow-me/rainbowkit/styles.css';
 import {
   apiProvider,
@@ -7,7 +6,6 @@ import {
   getDefaultWallets,
   RainbowKitProvider,
 } from '@rainbow-me/rainbowkit';
-import 'bootstrap/dist/css/bootstrap.css'
 import { chain, createClient, WagmiProvider } from 'wagmi';
 import Navbar from '../components/Navbar';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";

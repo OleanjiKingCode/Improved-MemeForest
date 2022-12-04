@@ -6,9 +6,9 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 contract MemeForest is ReentrancyGuard{
-    using Counters for Counters.Counter;
-    Counters.Counter public NumOfAllMemes;
-    Counters.Counter public NumOfAllMembers;
+        using Counters for Counters.Counter;
+        Counters.Counter public NumOfAllMemes;
+        Counters.Counter public NumOfAllMembers;
 
     struct MemeMembers {
         string Name;
@@ -92,7 +92,7 @@ contract MemeForest is ReentrancyGuard{
         uint256 NewLikesNo,
         uint256 CreatorId,
         address Unliker
-        );
+    );
 
     function CreateMembers (string memory _name, string memory _date) public nonReentrant{
         require(alreadyAMember[msg.sender] == false, "You are already a member");

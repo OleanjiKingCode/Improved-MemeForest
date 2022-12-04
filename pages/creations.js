@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import MEME from '../artifacts/contracts/MemeForest.sol/MemeForest.json'
 import 'bootstrap/dist/css/bootstrap.css'
 import axios from "axios"
-import { createClient } from 'urql'
+import {createClient} from 'urql'
 import { Web3Storage } from 'web3.storage'
 
 
